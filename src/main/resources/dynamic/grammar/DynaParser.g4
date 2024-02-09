@@ -130,5 +130,7 @@ body
     ;
 
 delim
-    : (';' | {this.newLineAhead()}?)
+    : ';'
+    | EOF
+    | {this.newLineAhead()}?
     ;
