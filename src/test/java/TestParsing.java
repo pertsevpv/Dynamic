@@ -23,8 +23,7 @@ public class TestParsing {
 
   private String readFile(String filename) {
     try {
-      return Files.readString(Path.of("src", "test", "resources", "examples", filename))
-          .replace("\r", "");
+      return Files.readString(Path.of("src", "test", "resources", "examples", filename));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
