@@ -5,8 +5,8 @@ ARROW: '=>';
 SEMI: ';' ;
 COMMA : ',' ;
 ASSIGN: ':=';
-DOT: '.';
 DOTDOT: '..';
+DOT: '.';
 
 // logical operators
 OR: 'or';
@@ -69,7 +69,7 @@ IDENTIFIER: Letter LetterOrDigit*;
 // literals
 BOOLEAN_LITERAL: 'true' | 'false';
 INTEGER_LITERAL: Digits;
-REAL_LITERAL: (Digits '.' Digits?) Exponent?;
+REAL_LITERAL: (Digits '.' Digits) Exponent?;
 STRING_LITERAL: '"' (~["\\\r\n] | EscapeSeq)* '"';
 
 // whitespaces & comments

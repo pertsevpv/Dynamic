@@ -17,7 +17,7 @@ public class DynaParser extends DynaParserBase {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ARROW=1, SEMI=2, COMMA=3, ASSIGN=4, DOT=5, DOTDOT=6, OR=7, AND=8, XOR=9, 
+		ARROW=1, SEMI=2, COMMA=3, ASSIGN=4, DOTDOT=5, DOT=6, OR=7, AND=8, XOR=9, 
 		NOT=10, IF=11, THEN=12, ELSE=13, END=14, WHILE=15, LOOP=16, FOR=17, IN=18, 
 		RETURN=19, IS=20, PRINT=21, VAR=22, READ_INT=23, READ_REAL=24, READ_STRING=25, 
 		LCURLY=26, RCURLY=27, LPAREN=28, RPAREN=29, LBRACK=30, RBRACK=31, LE=32, 
@@ -46,7 +46,7 @@ public class DynaParser extends DynaParserBase {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'=>'", "';'", "','", "':='", "'.'", "'..'", "'or'", "'and'", "'xor'", 
+			null, "'=>'", "';'", "','", "':='", "'..'", "'.'", "'or'", "'and'", "'xor'", 
 			"'not'", "'if'", "'then'", "'else'", "'end'", "'while'", "'loop'", "'for'", 
 			"'in'", "'return'", "'is'", "'print'", "'var'", "'readInt'", "'readReal'", 
 			"'readString'", "'{'", "'}'", "'('", "')'", "'['", "']'", "'<'", "'<='", 
@@ -57,7 +57,7 @@ public class DynaParser extends DynaParserBase {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "ARROW", "SEMI", "COMMA", "ASSIGN", "DOT", "DOTDOT", "OR", "AND", 
+			null, "ARROW", "SEMI", "COMMA", "ASSIGN", "DOTDOT", "DOT", "OR", "AND", 
 			"XOR", "NOT", "IF", "THEN", "ELSE", "END", "WHILE", "LOOP", "FOR", "IN", 
 			"RETURN", "IS", "PRINT", "VAR", "READ_INT", "READ_REAL", "READ_STRING", 
 			"LCURLY", "RCURLY", "LPAREN", "RPAREN", "LBRACK", "RBRACK", "LE", "LE_EQ", 
@@ -2306,7 +2306,7 @@ public class DynaParser extends DynaParserBase {
 		"\u000e\u0000\u0000a\u000b\u0001\u0000\u0000\u0000bc\u0005\u000f\u0000"+
 		"\u0000cd\u0003\u0012\t\u0000de\u0003(\u0014\u0000ep\u0001\u0000\u0000"+
 		"\u0000fg\u0005\u0011\u0000\u0000gh\u00050\u0000\u0000hi\u0005\u0012\u0000"+
-		"\u0000ij\u0003\u0012\t\u0000jk\u0005\u0006\u0000\u0000kl\u0003\u0012\t"+
+		"\u0000ij\u0003\u0012\t\u0000jk\u0005\u0005\u0000\u0000kl\u0003\u0012\t"+
 		"\u0000lm\u0001\u0000\u0000\u0000mn\u0003(\u0014\u0000np\u0001\u0000\u0000"+
 		"\u0000ob\u0001\u0000\u0000\u0000of\u0001\u0000\u0000\u0000p\r\u0001\u0000"+
 		"\u0000\u0000qs\u0005\u0013\u0000\u0000rt\u0003\u0012\t\u0000sr\u0001\u0000"+
@@ -2379,8 +2379,8 @@ public class DynaParser extends DynaParserBase {
 		"\u0000\u0000\u0000\u00e6\u00e7\u0001\u0000\u0000\u0000\u00e7\u00e9\u0001"+
 		"\u0000\u0000\u0000\u00e8\u00e6\u0001\u0000\u0000\u0000\u00e9\u00ea\u0005"+
 		"\u001d\u0000\u0000\u00ea\u00f2\u0001\u0000\u0000\u0000\u00eb\u00ec\n\u0002"+
-		"\u0000\u0000\u00ec\u00ed\u0005\u0005\u0000\u0000\u00ed\u00f2\u00050\u0000"+
-		"\u0000\u00ee\u00ef\n\u0001\u0000\u0000\u00ef\u00f0\u0005\u0005\u0000\u0000"+
+		"\u0000\u0000\u00ec\u00ed\u0005\u0006\u0000\u0000\u00ed\u00f2\u00050\u0000"+
+		"\u0000\u00ee\u00ef\n\u0001\u0000\u0000\u00ef\u00f0\u0005\u0006\u0000\u0000"+
 		"\u00f0\u00f2\u00052\u0000\u0000\u00f1\u00da\u0001\u0000\u0000\u0000\u00f1"+
 		"\u00df\u0001\u0000\u0000\u0000\u00f1\u00eb\u0001\u0000\u0000\u0000\u00f1"+
 		"\u00ee\u0001\u0000\u0000\u0000\u00f2\u00f5\u0001\u0000\u0000\u0000\u00f3"+
