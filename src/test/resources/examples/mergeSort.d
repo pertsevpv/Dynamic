@@ -4,9 +4,9 @@ var merge := func(a) is
     end
     var l := merge(subArray(a, 0, len(a) / 2)),
         r := merge(subArray(a, len(a) / 2), len(a)),
-        i := 0
-        j := 0
-        k := 0
+        i := 0,
+        j := 0,
+        k := 0,
         c := []
 
    while i < len(l) and j < len(r) loop
@@ -22,10 +22,12 @@ var merge := func(a) is
    while i < len(l) loop
         c[k] := l[i]
         i := i + 1
+        k := k + 1
    end
    while j < len(r) loop
         c[k] := r[j]
         j := j + 1
+        k := k + 1
    end
    return c
 end
