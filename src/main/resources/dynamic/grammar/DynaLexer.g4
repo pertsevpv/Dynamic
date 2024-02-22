@@ -76,7 +76,7 @@ STRING_LITERAL: '"' (~["\\\r\n] | EscapeSeq)* '"';
 WS: [ \t\u000C]+ -> channel(HIDDEN);
 COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN);
-NEW_LINE: '\r'? '\n' -> channel(HIDDEN);
+NEW_LINE: ('\r'? '\n' | '\r') -> channel(HIDDEN);
 
 // fragments
 fragment LetterOrDigit: Letter | [0-9];
