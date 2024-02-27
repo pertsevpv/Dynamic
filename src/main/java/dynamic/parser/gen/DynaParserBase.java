@@ -13,7 +13,10 @@ public abstract class DynaParserBase extends Parser {
   protected boolean newLineAhead() {
     int ind = this.getCurrentToken().getTokenIndex() - 1;
     while (_input.get(ind).getChannel() == Lexer.HIDDEN) {
-      if (_input.get(ind).getType() == DynaParser.NEW_LINE) return true;
+      if (_input.get(ind).getType() == DynaParser.NEW_LINE ||
+          _input.get(ind).getType() == DynaParser.COMMENT &&
+          _input.get(ind).getText().contains("\n")
+      ) return true;
       ind--;
     }
     return false;
