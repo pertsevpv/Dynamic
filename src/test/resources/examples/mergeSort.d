@@ -14,7 +14,7 @@ var merge := func(a) is
             c[k] := l[i]
             i := i + 1
         else
-            c[k] = r[j]
+            c[k] := r[j]
             j := j + 1
         end
         k := k + 1

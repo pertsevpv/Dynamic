@@ -88,7 +88,7 @@ functionLiteral
     ;
 
 parameters
-    : '(' IDENTIFIER (',' IDENTIFIER)* ')'
+    : '(' (IDENTIFIER (',' IDENTIFIER)*)? ')'
     ;
 
 funBody
@@ -99,7 +99,7 @@ funBody
 reference
     : IDENTIFIER
     | reference '[' expression ']'
-    | reference '(' expression (',' expression)* ')'
+    | reference '(' (expression (',' expression)*)? ')'
     | reference '.' IDENTIFIER
     | reference '.' INTEGER_LITERAL
     ;
@@ -126,7 +126,7 @@ tupleLiteral
     ;
 
 body
-    : ((declaration | statement | expression) delim)*
+    : (statement delim)*
     ;
 
 delim
