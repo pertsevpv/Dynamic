@@ -18,24 +18,24 @@ variableDefinition
 
 statement
     : declaration
-    | assigment
+    | assignment
     | if
     | loop
     | return
     | print
     ;
 
-assigment
+assignment
     : reference ':=' expression
     ;
 
 if
-    : IF expression THEN body (ELSE body)? END
+    : IF expression THEN ifBlock=body (ELSE elseBlock=body)? END
     ;
 
 loop
-    : WHILE expression loopBody
-    | FOR IDENTIFIER IN (expression '..' expression) loopBody
+    : WHILE cond=expression loopBody
+    | FOR IDENTIFIER IN (from=expression '..' to=expression) loopBody
     ;
 
 return
@@ -47,24 +47,24 @@ print
     ;
 
 expression
-    : relation ((AND | OR | XOR) relation)?
+    : relation (sign+=(AND | OR | XOR) relation)*
     ;
 
 relation
-    : factor (('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
+    : factor (sign=('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
     ;
 
 factor
-    : term (('+' | '-')? term)*
+    : term (sign+=('+' | '-') term)*
     ;
 
 term
-    : unary (('*' | '/') unary)*
+    : unary (sign+=('*' | '/') unary)*
     ;
 
 unary
     : reference (IS typeIndicator)?
-    | ('+' | '-' | NOT)? primary
+    | sign=('+' | '-' | NOT)? primary
     ;
 
 primary
@@ -122,7 +122,11 @@ arrayLiteral
     ;
 
 tupleLiteral
-    : '{' ((IDENTIFIER ':=')? expression (',' (IDENTIFIER ':=')? expression)*)? '}'
+    : '{' (tupleElem (',' tupleElem)*)? '}'
+    ;
+
+tupleElem
+    : (IDENTIFIER ':=')? expression
     ;
 
 body

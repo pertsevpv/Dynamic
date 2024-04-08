@@ -3,7 +3,7 @@ package dynamic.semantic;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class Id {
+public class Id implements Validatable {
 
   public Span span;
   public String name;

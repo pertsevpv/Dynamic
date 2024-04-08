@@ -1,5 +1,6 @@
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
+import dynamic.semantic.DynaWalker;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -35,6 +36,20 @@ public class TestParsing {
       var parser = new DynaParser(tokenStream);
       parser.setErrorHandler(new BailErrorStrategy());
       var program = parser.program();
+    });
+  }
+
+  @Test
+  public void testSemantic() {
+    String source = readFile("binSearch.d");
+    Assertions.assertDoesNotThrow(() -> {
+      var lexer = new DynaLexer(CharStreams.fromString(source));
+      var tokenStream = new CommonTokenStream(lexer);
+      tokenStream.fill();
+      var parser = new DynaParser(tokenStream);
+      parser.setErrorHandler(new BailErrorStrategy());
+      var programCtx = parser.program();
+      var program = new DynaWalker(programCtx).analyze();
     });
   }
 

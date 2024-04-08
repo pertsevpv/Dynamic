@@ -6,17 +6,19 @@ import dynamic.semantic.expr.Expr;
 public class UnOperation extends Expr {
 
   public Expr expr;
+  public OpType opType;
 
-  public UnOperation(Span span, Expr expr) {
-    super(span);
+  public UnOperation(Expr expr, OpType type) {
+    super(expr.span);
     this.expr = expr;
+    this.opType = type;
   }
 
-  enum Type {
+  public enum OpType {
     MINUS("-"), PLUS("+"), NOT("not");
 
     final String sign;
-    Type(String sign) {
+    OpType(String sign) {
       this.sign = sign;
     }
 

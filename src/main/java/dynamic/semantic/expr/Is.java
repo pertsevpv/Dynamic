@@ -1,16 +1,16 @@
 package dynamic.semantic.expr;
 
-import dynamic.semantic.Span;
 import dynamic.semantic.Type;
+import dynamic.semantic.expr.ref.Reference;
 
 public class Is extends Expr {
 
-  public Expr expr;
+  public Reference ref;
   public Type isType;
 
-  public Is(Expr expr, Type isType, Span span) {
-    super(span);
-    this.expr = expr;
+  public Is(Reference ref, Type isType) {
+    super(ref.span);
+    this.ref = ref;
     this.isType = isType;
   }
 }

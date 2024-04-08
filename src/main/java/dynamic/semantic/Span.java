@@ -2,6 +2,7 @@ package dynamic.semantic;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.Objects;
 
@@ -22,6 +23,10 @@ public class Span {
 
   public static Span fromRule(ParserRuleContext ctx) {
     return fromToken(ctx.start);
+  }
+
+  public static Span fromNode(TerminalNode node) {
+    return fromToken(node.getSymbol());
   }
 
   public static Span fromToken(Token start) {

@@ -7,6 +7,10 @@ public class Return extends Statement {
 
   public Expr expr;
 
+  public Return(Span span) {
+    this(null, span);
+  }
+
   public Return(Expr expr, Span span) {
     super(span);
     this.expr = expr;
