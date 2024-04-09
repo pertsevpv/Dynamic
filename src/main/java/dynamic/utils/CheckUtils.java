@@ -10,14 +10,14 @@ import dynamic.semantic.entity.expr.Expr;
 public class CheckUtils {
 
   public static void checkVarDeclared(Id id, ValidationContext context) throws ValidationException {
-    if (!context.containDeclaration(id.name)) {
-      throw new ValidationException("Undeclared variable %s at %s".formatted(id.name, id.span));
+    if (!context.containDecl(id.name)) {
+      throw new ValidationException(id.span, "Undeclared variable %s".formatted(id.name));
     }
   }
 
   public static void checkVarNotDeclared(Id id, ValidationContext context) throws ValidationException {
-    if (context.containDeclaration(id.name)) {
-      throw new ValidationException("Var %s at %s is already defined".formatted(id.name, id.span));
+    if (context.containDeclInCurScope(id.name)) {
+      throw new ValidationException(id.span, "Var %s is already defined".formatted(id.name));
     }
   }
 
@@ -27,8 +27,8 @@ public class CheckUtils {
   }
 
   public static void checkTypes(Type expected, Type got, Span span) throws ValidationException {
-    if (!TypeUtils.checkType(Type.INT, got)) {
-      throw new ValidationException("Expected %s at %s, but %s got".formatted(expected, got, span));
+    if (!TypeUtils.checkType(expected, got)) {
+      throw new ValidationException(span, "Expected %s, but %s got".formatted(expected, got));
     }
   }
 }

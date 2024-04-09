@@ -33,4 +33,14 @@ public class While extends Statement {
     block.validate(context);
     context.exitScope();
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth));
+    sb.append("while ");
+    cond.print(depth, sb);
+    sb.append(" loop\n");
+    block.print(depth, sb);
+    sb.append("  ".repeat(depth)).append("end");
+  }
 }

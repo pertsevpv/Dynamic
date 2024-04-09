@@ -20,4 +20,9 @@ public class IdRef extends Reference {
     var expr = context.getExpr(id.name);
     if (expr != null) this.type = expr.type;
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append(id);
+  }
 }

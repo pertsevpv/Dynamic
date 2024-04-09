@@ -8,6 +8,7 @@ import dynamic.semantic.entity.expr.fun.Func;
 import dynamic.utils.CheckUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FunctionCall extends Call {
 
@@ -31,10 +32,22 @@ public class FunctionCall extends Call {
       CheckUtils.checkTypes(Type.FUNC, expr);
       if (expr instanceof Func func) {
         if (func.params.size() != params.size()) {
-          System.out.format("Wrong number of params for function call %s at %s: expected %s, got %s",
-              this, span, func.params.size(), params.size());
+          System.out.format("%s Wrong number of params for function call %s: expected %s, got %s\n",
+              span, this, func.params.size(), params.size());
         }
       }
     }
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    ref.print(depth, sb);
+    sb.append("(");
+    if (!params.isEmpty()) {
+      params.get(0).print(depth, sb);
+      for (int i = 1; i < params.size(); i++)
+        params.get(i).print(depth, sb.append(", "));
+    }
+    sb.append(")");
   }
 }

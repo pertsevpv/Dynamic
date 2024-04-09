@@ -21,4 +21,9 @@ public class Id {
   public static Id fromToken(Token token) {
     return new Id(token.getText(), Span.fromToken(token));
   }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

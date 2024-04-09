@@ -28,4 +28,11 @@ public class Assignment extends Statement {
       context.rewriteVar(idRef.id.name, expression);
     }
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth));
+    reference.print(depth, sb);
+    expression.print(depth, sb.append(" := "));
+  }
 }

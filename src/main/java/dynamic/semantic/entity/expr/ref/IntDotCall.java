@@ -19,4 +19,10 @@ public class IntDotCall extends Call {
     ref.validate(context);
     CheckUtils.checkTypes(Type.TUPLE, ref);
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    ref.print(depth, sb);
+    sb.append(".").append(label);
+  }
 }

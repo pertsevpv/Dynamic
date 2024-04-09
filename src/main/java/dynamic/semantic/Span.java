@@ -31,7 +31,7 @@ public class Span {
 
   public static Span fromToken(Token start) {
     int line = start.getLine();
-    int pos = start.getCharPositionInLine();
+    int pos = start.getCharPositionInLine() + 1;
     return new Span(line, pos);
   }
 

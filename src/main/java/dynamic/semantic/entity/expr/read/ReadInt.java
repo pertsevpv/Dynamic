@@ -13,4 +13,9 @@ public class ReadInt extends Read<Integer> {
   public void validate(ValidationContext context) {
     this.type = Type.INT;
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("readInt");
+  }
 }

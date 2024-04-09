@@ -5,11 +5,14 @@ import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
+import dynamic.semantic.entity.Printable;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.utils.Pair;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TupleConst extends Const<List<TupleConst.TupleElem>> {
 
@@ -23,14 +26,24 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     for (var e: value) {
       e.value.validate(context);
       if (e.id != null) {
-        if (definedLabels.contains(e.id.name)) throw new ValidationException("Tuple %s have dublicated label %s".formatted(this, e.id.name));
+        if (definedLabels.contains(e.id.name)) throw new ValidationException(span, "Tuple %s have duplicated label %s".formatted(this, e.id.name));
         definedLabels.add(e.id.name);
       }
     }
-    this.type = Type.TUPLE;
   }
 
-  public static class TupleElem {
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("{");
+    if (!value.isEmpty()) {
+      value.get(0).print(depth, sb);
+      for (int i = 1; i < value.size(); i++)
+        value.get(i).print(depth, sb.append(", "));
+    }
+    sb.append("}");
+  }
+
+  public static class TupleElem implements Printable {
     public Id id;
     public Expr value;
 
@@ -47,6 +60,12 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     public String toString() {
       if (id == null) return value.toString();
       else return "%s := %s".formatted(id, value);
+    }
+
+    @Override
+    public void print(int depth, StringBuilder sb) {
+      if (id != null) sb.append(id).append(" := ");
+      value.print(depth, sb);
     }
   }
 }

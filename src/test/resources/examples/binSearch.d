@@ -1,5 +1,5 @@
 var binSearch := func(arr, key) is
-    var l := -1, r:= len(arr)
+    var l := -1, r:= arr.len
     while l < r - 1 loop
         var m := (l + r) / 2
         if arr[m] < key then

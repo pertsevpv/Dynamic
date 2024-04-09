@@ -24,4 +24,20 @@ public class ExprFunc extends Func {
     expr.validate(context);
     context.exitScope();
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("func ");
+    if (params != null) {
+      sb.append("(");
+      if (!params.isEmpty()) {
+        params.get(0).print(depth, sb);
+        for (int i = 1; i < params.size(); i++)
+          params.get(i).print(depth, sb.append(", "));
+      }
+      sb.append(")");
+    }
+    sb.append(" => ");
+    expr.print(depth, sb);
+  }
 }

@@ -22,4 +22,11 @@ public class Return extends Statement {
   public void validate(ValidationContext context) throws ValidationException {
     if (expr != null) expr.validate(context);
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth))
+        .append("return");
+    if (expr != null) expr.print(depth, sb.append(" "));
+  }
 }

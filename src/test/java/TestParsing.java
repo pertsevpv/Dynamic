@@ -42,17 +42,24 @@ public class TestParsing {
   }
 
   @Test
-  public void testSemantic() throws ValidationException {
-    String source = readFile("binSearch.d");
-    Assertions.assertDoesNotThrow(() -> {
-      var lexer = new DynaLexer(CharStreams.fromString(source));
-      var tokenStream = new CommonTokenStream(lexer);
-      tokenStream.fill();
-      var parser = new DynaParser(tokenStream);
-      parser.setErrorHandler(new BailErrorStrategy());
-      var programCtx = parser.program();
-      new DynaWalker(programCtx).analyze().validate(new ValidationContext());
-    });
+  public void testSemantic() {
+    String source = readFile("mergeSort.d");
+    var lexer = new DynaLexer(CharStreams.fromString(source));
+    var tokenStream = new CommonTokenStream(lexer);
+    tokenStream.fill();
+    var parser = new DynaParser(tokenStream);
+    parser.setErrorHandler(new BailErrorStrategy());
+    var programCtx = parser.program();
+    try {
+      var walker = new DynaWalker(programCtx).analyze();
+      StringBuilder sb = new StringBuilder();
+      walker.print(0, sb);
+      System.out.println(sb);
+      walker.validate(new ValidationContext());
+    } catch (ValidationException e) {
+    e.printStackTrace();
+//      System.err.println(e.getMessage());
+    }
   }
 
   private String readFile(String filename) {

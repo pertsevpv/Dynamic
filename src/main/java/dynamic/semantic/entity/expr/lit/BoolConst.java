@@ -11,6 +11,10 @@ public class BoolConst extends Const<Boolean> {
 
   @Override
   public void validate(ValidationContext context) {
-    this.type = Type.BOOL;
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append(value);
   }
 }

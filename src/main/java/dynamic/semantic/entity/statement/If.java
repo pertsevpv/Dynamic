@@ -25,12 +25,6 @@ public class If extends Statement {
   }
 
   @Override
-  public String toString() {
-    if (elseBlock == null) return "if %s then %s".formatted(cond, ifBlock);
-    else return "if %s then %s else %s".formatted(cond, ifBlock, elseBlock);
-  }
-
-  @Override
   public void validate(ValidationContext context) throws ValidationException {
     cond.validate(context);
     CheckUtils.checkTypes(Type.BOOL, cond);
@@ -44,5 +38,19 @@ public class If extends Statement {
       elseBlock.validate(context);
       context.exitScope();
     }
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth))
+        .append("if ");
+    cond.print(depth, sb);
+    sb.append(" then\n");
+    ifBlock.print(depth, sb);
+    if (elseBlock != null) {
+      sb.append("  ".repeat(depth)).append("else\n");
+      elseBlock.print(depth, sb);
+    }
+    sb.append("  ".repeat(depth)).append("end");
   }
 }

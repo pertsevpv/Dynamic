@@ -1,6 +1,7 @@
 package dynamic.semantic.entity.expr.fun;
 
 import dynamic.semantic.Span;
+import dynamic.semantic.Type;
 import dynamic.semantic.entity.expr.Expr;
 
 import java.util.List;
@@ -12,5 +13,6 @@ public abstract class Func extends Expr {
   public Func(List<Parameter> params, Span span) {
     super(span);
     this.params = params;
+    this.type = Type.FUNC;
   }
 }

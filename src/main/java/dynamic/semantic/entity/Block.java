@@ -8,7 +8,7 @@ import dynamic.semantic.entity.statement.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Block implements Validatable {
+public class Block implements Validatable, Printable {
 
   public List<Statement> block;
 
@@ -31,6 +31,14 @@ public class Block implements Validatable {
       stat.validate(context);
       if (hasReturn) stat.isReachable = false;
       if (stat instanceof Return) hasReturn = true;
+    }
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    for (var stat: block) {
+      stat.print(depth + 1, sb);
+      sb.append("\n");
     }
   }
 }

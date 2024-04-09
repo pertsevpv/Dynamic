@@ -1,10 +1,10 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
-import dynamic.semantic.context.ValidationContext;
-import dynamic.semantic.Type;
-import dynamic.semantic.entity.Block;
 import dynamic.semantic.Span;
+import dynamic.semantic.Type;
+import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.Block;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.expr.fun.Parameter;
 import dynamic.utils.CheckUtils;
@@ -25,7 +25,7 @@ public class For extends Statement {
 
   @Override
   public void validate(ValidationContext context) throws ValidationException {
-    CheckUtils.checkVarDeclared(param.name, context);
+    CheckUtils.checkVarNotDeclared(param.name, context);
 
     from.validate(context);
     CheckUtils.checkTypes(Type.INT, from);
@@ -37,5 +37,21 @@ public class For extends Statement {
     context.putDeclaration(param);
     block.validate(context);
     context.exitScope();
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth))
+        .append("for ")
+        .append(param.name)
+        .append(" in ");
+    from.print(depth, sb);
+    sb.append("..");
+    to.print(depth, sb);
+    sb.append(" ")
+        .append("loop\n");
+    block.print(depth, sb);
+    sb.append("  ".repeat(depth))
+        .append("end");
   }
 }

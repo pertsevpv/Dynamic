@@ -11,6 +11,10 @@ public class RealConst extends Const<Double>{
 
   @Override
   public void validate(ValidationContext context) {
-    this.type = Type.REAL;
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append(value);
   }
 }

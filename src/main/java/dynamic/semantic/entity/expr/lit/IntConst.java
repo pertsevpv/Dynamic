@@ -11,6 +11,10 @@ public class IntConst extends Const<Integer> {
 
   @Override
   public void validate(ValidationContext context) {
-    this.type = Type.INT;
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append(value);
   }
 }

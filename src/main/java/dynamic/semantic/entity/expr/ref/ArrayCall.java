@@ -21,6 +21,13 @@ public class ArrayCall extends Call {
     ref.validate(context);
     CheckUtils.checkTypes(Type.ARRAY, ref);
     expr.validate(context);
-    CheckUtils.checkTypes(Type.INT, ref);
+    CheckUtils.checkTypes(Type.INT, expr);
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    ref.print(depth, sb);
+    expr.print(depth, sb.append("["));
+    sb.append("]");
   }
 }

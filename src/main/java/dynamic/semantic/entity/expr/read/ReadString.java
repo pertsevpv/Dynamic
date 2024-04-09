@@ -13,4 +13,9 @@ public class ReadString extends Read<String> {
   public void validate(ValidationContext context) {
     this.type = Type.STRING;
   }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("readString");
+  }
 }

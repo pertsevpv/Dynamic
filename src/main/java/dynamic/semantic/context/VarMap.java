@@ -32,8 +32,12 @@ public class VarMap {
     }
   }
 
-  public boolean containDeclaration(String name) {
+  public boolean containDecl(String name) {
     return get(name) != null;
+  }
+
+  public boolean containDeclInCurScope(String name) {
+    return varToInfo.containsKey(name);
   }
 
   private VarNode get(String name) {

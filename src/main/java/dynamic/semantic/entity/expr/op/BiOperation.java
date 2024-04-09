@@ -1,7 +1,9 @@
 package dynamic.semantic.entity.expr.op;
 
+import dynamic.exception.ValidationException;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.utils.TypeUtils;
 
 public class BiOperation extends Expr {
 
@@ -16,8 +18,19 @@ public class BiOperation extends Expr {
   }
 
   @Override
-  public void validate(ValidationContext context) {
+  public void validate(ValidationContext context) throws ValidationException {
+    left.validate(context);
+    right.validate(context);
+    this.type = TypeUtils.checkBiOpType(span, left.type, right.type, opType);
+  }
 
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("(");
+    left.print(depth, sb);
+    sb.append(" ").append(opType.sign).append(" ");
+    right.print(depth, sb);
+    sb.append(")");
   }
 
   public enum OpType {

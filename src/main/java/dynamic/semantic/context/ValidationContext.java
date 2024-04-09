@@ -4,8 +4,6 @@ import dynamic.semantic.Type;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.statement.Declaration;
 
-import java.util.Scanner;
-
 public class ValidationContext {
 
   public VarMap varMap = new VarMap(null);
@@ -26,8 +24,12 @@ public class ValidationContext {
     return varMap.getDecl(name);
   }
 
-  public boolean containDeclaration(String name) {
-    return varMap.containDeclaration(name);
+  public boolean containDecl(String name) {
+    return varMap.containDecl(name);
+  }
+
+  public boolean containDeclInCurScope(String name) {
+    return varMap.containDeclInCurScope(name);
   }
 
   public Expr getExpr(String name) {
@@ -41,5 +43,4 @@ public class ValidationContext {
   public void rewriteVar(String name, Expr expr) {
     varMap.rewriteVar(name, expr);
   }
-
 }

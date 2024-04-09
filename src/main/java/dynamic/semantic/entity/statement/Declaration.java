@@ -28,10 +28,20 @@ public class Declaration extends Statement {
   @Override
   public void validate(ValidationContext context) throws ValidationException {
     CheckUtils.checkVarNotDeclared(name, context);
+    context.putDeclaration(this);
     if (expression != null) {
       expression.validate(context);
       this.type = expression.type;
+    } else {
+      this.type = Type.EMPTY;
     }
-    context.putDeclaration(this);
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth))
+        .append("var ")
+        .append(name);
+    if (expression != null) expression.print(depth, sb.append(" := "));
   }
 }

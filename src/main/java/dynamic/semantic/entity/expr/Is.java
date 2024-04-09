@@ -21,4 +21,15 @@ public class Is extends Expr {
     ref.validate(context);
     this.type = Type.BOOL;
   }
+
+  @Override
+  public String toString() {
+    return "%s ";
+  }
+
+  @Override
+  public void print(int depth, StringBuilder sb) {
+    ref.print(depth, sb);
+    sb.append(" is ").append(isType);
+  }
 }
