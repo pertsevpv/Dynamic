@@ -1,6 +1,8 @@
+import dynamic.exception.ValidationException;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
+import dynamic.semantic.context.ValidationContext;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -40,7 +42,7 @@ public class TestParsing {
   }
 
   @Test
-  public void testSemantic() {
+  public void testSemantic() throws ValidationException {
     String source = readFile("binSearch.d");
     Assertions.assertDoesNotThrow(() -> {
       var lexer = new DynaLexer(CharStreams.fromString(source));
@@ -49,7 +51,7 @@ public class TestParsing {
       var parser = new DynaParser(tokenStream);
       parser.setErrorHandler(new BailErrorStrategy());
       var programCtx = parser.program();
-      var program = new DynaWalker(programCtx).analyze();
+      new DynaWalker(programCtx).analyze().validate(new ValidationContext());
     });
   }
 

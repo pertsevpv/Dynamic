@@ -1,17 +1,22 @@
 package dynamic.semantic;
 
 import dynamic.parser.gen.DynaParser;
-import dynamic.semantic.*;
-import dynamic.semantic.expr.Expr;
-import dynamic.semantic.expr.Is;
-import dynamic.semantic.expr.Read;
-import dynamic.semantic.expr.fun.ExprFunc;
-import dynamic.semantic.expr.fun.Func;
-import dynamic.semantic.expr.lit.*;
-import dynamic.semantic.expr.op.BiOperation;
-import dynamic.semantic.expr.op.UnOperation;
-import dynamic.semantic.expr.ref.*;
-import dynamic.semantic.statement.*;
+import dynamic.semantic.entity.Block;
+import dynamic.semantic.entity.Id;
+import dynamic.semantic.entity.Program;
+import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.Is;
+import dynamic.semantic.entity.expr.fun.ExprFunc;
+import dynamic.semantic.entity.expr.fun.BlockFunc;
+import dynamic.semantic.entity.expr.fun.Parameter;
+import dynamic.semantic.entity.expr.lit.*;
+import dynamic.semantic.entity.expr.read.ReadInt;
+import dynamic.semantic.entity.expr.read.ReadReal;
+import dynamic.semantic.entity.expr.read.ReadString;
+import dynamic.semantic.entity.expr.ref.*;
+import dynamic.semantic.entity.statement.*;
+import dynamic.semantic.entity.expr.op.BiOperation;
+import dynamic.semantic.entity.expr.op.UnOperation;
 import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
@@ -109,7 +114,7 @@ public class DynaWalker {
       return new While(expr, block, span);
     }
     var span = Span.fromNode(ctx.FOR());
-    var var = Id.fromNode(ctx.IDENTIFIER());
+    var var = new Parameter(Id.fromNode(ctx.IDENTIFIER()));
     var from = handleExpr(ctx.from);
     var to = handleExpr(ctx.to);
     return new For(var, from, to, block, span);
@@ -169,9 +174,9 @@ public class DynaWalker {
 
   private Expr handleExpr(DynaParser.PrimaryContext ctx) {
     if (ctx.literal() != null) return handleConst(ctx.literal());
-    if (ctx.READ_INT() != null) return new Read(Type.INT, Span.fromNode(ctx.READ_INT()));
-    if (ctx.READ_REAL() != null) return new Read(Type.REAL, Span.fromNode(ctx.READ_REAL()));
-    if (ctx.READ_STRING() != null) return new Read(Type.STRING, Span.fromNode(ctx.READ_STRING()));
+    if (ctx.READ_INT() != null) return new ReadInt(Span.fromNode(ctx.READ_INT()));
+    if (ctx.READ_REAL() != null) return new ReadReal(Span.fromNode(ctx.READ_REAL()));
+    if (ctx.READ_STRING() != null) return new ReadString(Span.fromNode(ctx.READ_STRING()));
     if (ctx.expression() != null) {
       var expr = handleExpr(ctx.expression());
       if (ctx.MINUS() != null) return new UnOperation(expr, UnOperation.OpType.MINUS);
@@ -182,9 +187,11 @@ public class DynaWalker {
 
   private Expr handleFunc(DynaParser.FunctionLiteralContext ctx) {
     var span = Span.fromNode(ctx.FUNC());
-    List<Id> params;
+    List<Parameter> params;
     if (ctx.parameters() == null) params = Collections.emptyList();
-    else params = ctx.parameters().IDENTIFIER().stream().map(Id::fromNode).toList();
+    else params = ctx.parameters().IDENTIFIER().stream()
+        .map(Id::fromNode).map(Parameter::new)
+        .toList();
 
     if (ctx.funBody().expression() != null) {
       var expr = handleExpr(ctx.funBody().expression());
@@ -194,7 +201,7 @@ public class DynaWalker {
           .stream().map(this::handleStatement)
           .toList();
       var block = new Block(statementList);
-      return new Func(params, block, span);
+      return new BlockFunc(params, block, span);
     }
   }
 
