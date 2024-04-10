@@ -4,7 +4,9 @@ import dynamic.exception.ValidationException;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.ref.ArrayCall;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,5 +38,10 @@ public class ArrayConst extends Const<List<Expr>> {
         value.get(i).print(depth, sb.append(", "));
     }
     sb.append("]");
+  }
+
+  @Override
+  public Expr optimize() {
+    return new ArrayConst(value.stream().map(Optimizable::optimize).toList(), span);
   }
 }

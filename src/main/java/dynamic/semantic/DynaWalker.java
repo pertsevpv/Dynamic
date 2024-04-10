@@ -45,6 +45,7 @@ public class DynaWalker {
     if (ctx.if_() != null) return handleIf(ctx.if_());
     if (ctx.return_() != null) return handleReturn(ctx.return_());
     if (ctx.print() != null) return handlePrint(ctx.print());
+    if (ctx.functionCall() != null) return handleFuncCall(ctx.functionCall());
     return handleLoop(ctx.loop());
   }
 
@@ -267,6 +268,15 @@ public class DynaWalker {
         .map(this::handleExpr)
         .toList();
     return new FunctionCall(ref, params);
+  }
+
+  private CallStat handleFuncCall(DynaParser.FunctionCallContext ctx) {
+    var ref = handleRef(ctx.reference());
+    List<Expr> params = ctx.expression()
+        .stream()
+        .map(this::handleExpr)
+        .toList();
+    return new CallStat(new FunctionCall(ref, params));
   }
 
   private Type getType(DynaParser.TypeIndicatorContext ctx) {

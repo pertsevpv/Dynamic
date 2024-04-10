@@ -2,8 +2,8 @@ package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
 import dynamic.semantic.context.ValidationContext;
-import dynamic.semantic.entity.Id;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.ref.FunctionCall;
 import dynamic.semantic.entity.expr.ref.IdRef;
 import dynamic.semantic.entity.expr.ref.Reference;
 import dynamic.utils.CheckUtils;
@@ -12,7 +12,8 @@ public class Assignment extends Statement {
 
   public Reference reference;
   public Expr expression;
-  public boolean isRewrote = false;
+  public boolean isReassigned = false;
+  public boolean rewroteToDeclaration = false;
 
   public Assignment(Reference reference, Expr expression) {
     super(reference.span);
@@ -22,7 +23,9 @@ public class Assignment extends Statement {
 
   @Override
   public void validate(ValidationContext context) throws ValidationException {
-    if (reference instanceof IdRef idRef) {
+    if (reference instanceof FunctionCall call) {
+      throw new ValidationException(call.span, "function call %s is illegal in assigment\n".formatted(call));
+    } else if (reference instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
     } else {
       reference.validate(context);
@@ -36,5 +39,16 @@ public class Assignment extends Statement {
     sb.append("  ".repeat(depth));
     reference.print(depth, sb);
     expression.print(depth, sb.append(" := "));
+  }
+
+  @Override
+  public Statement optimize() {
+    if (rewroteToDeclaration) return null;
+    if (isReassigned) {
+      if (expression instanceof FunctionCall call) {
+        return new CallStat(call.optimize());
+      } else return null;
+    }
+    return new Assignment(reference, expression.optimize());
   }
 }

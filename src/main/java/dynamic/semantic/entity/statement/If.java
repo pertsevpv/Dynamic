@@ -53,4 +53,9 @@ public class If extends Statement {
     }
     sb.append("  ".repeat(depth)).append("end");
   }
+
+  @Override
+  public Statement optimize() {
+    throw new UnsupportedOperationException();
+  }
 }

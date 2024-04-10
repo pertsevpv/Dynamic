@@ -3,6 +3,7 @@ package dynamic.semantic.entity.expr.ref;
 import dynamic.exception.ValidationException;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.Type;
+import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.CheckUtils;
 
 public class IntDotCall extends Call {
@@ -24,5 +25,10 @@ public class IntDotCall extends Call {
   public void print(int depth, StringBuilder sb) {
     ref.print(depth, sb);
     sb.append(".").append(label);
+  }
+
+  @Override
+  public Expr optimize() {
+    return new IntDotCall(ref, label);
   }
 }

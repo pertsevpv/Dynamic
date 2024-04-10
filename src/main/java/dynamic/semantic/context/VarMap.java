@@ -27,17 +27,22 @@ public class VarMap {
   }
 
   public void markUnused() {
-    for (var name: unusedVars) markUnused(name);
+    for (var name: unusedVars) markUnused(name, null);
   }
 
-  private void markUnused(String name) {
+  private void markUnused(String name, Assignment assignment) {
     var decl = varToInfo.get(name);
     if (decl.lastAssignment != null) {
       System.out.format("%s last assigment of %s is rewrote without usage\n", decl.lastAssignment.span, name);
-      decl.lastAssignment.isRewrote = true;
+      decl.lastAssignment.isReassigned = true;
     } else if (decl.getExpr() != null) {
-      System.out.format("%s var decl of %s is rewrote without usage\n", decl.initialDeclaration.span, name);
-      decl.initialDeclaration.isRewrote = true;
+      if (assignment != null) {
+        System.out.format("%s var decl of %s is rewrote without usage\n", decl.initialDeclaration.span, name);
+        decl.initialDeclaration.firstRewroteAssignment = assignment;
+      } else {
+        System.out.format("%s var decl of %s is unused\n", decl.initialDeclaration.span, name);
+        decl.initialDeclaration.isVariableUsed = false;
+      }
     }
   }
 
@@ -68,7 +73,6 @@ public class VarMap {
 
   public VarNode rewriteVar(String name) {
     if (varToInfo.containsKey(name)) {
-      unusedVars.add(name);
       return varToInfo.get(name);
     } else if (parent != null) return parent.get(name);
     return null;
@@ -77,7 +81,7 @@ public class VarMap {
   public void rewriteVar(String name, Assignment assignment) {
     VarNode info;
     if (varToInfo.containsKey(name)) {
-      if (unusedVars.contains(name)) markUnused(name);
+      if (unusedVars.contains(name)) markUnused(name, assignment);
       else unusedVars.add(name);
       info = varToInfo.get(name);
     } else info = rewriteVar(name);

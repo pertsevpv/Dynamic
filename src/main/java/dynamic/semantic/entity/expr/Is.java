@@ -3,6 +3,9 @@ package dynamic.semantic.entity.expr;
 import dynamic.exception.ValidationException;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.expr.lit.BoolConst;
+import dynamic.semantic.entity.expr.lit.Const;
+import dynamic.semantic.entity.expr.ref.IdRef;
 import dynamic.semantic.entity.expr.ref.Reference;
 
 public class Is extends Expr {
@@ -31,5 +34,12 @@ public class Is extends Expr {
   public void print(int depth, StringBuilder sb) {
     ref.print(depth, sb);
     sb.append(" is ").append(isType);
+  }
+
+  @Override
+  public Expr optimize() {
+    var optRef = ref.optimize();
+    if (optRef instanceof Const<?> aConst) return new BoolConst(aConst.type == isType, span);
+    return new Is(ref, isType);
   }
 }

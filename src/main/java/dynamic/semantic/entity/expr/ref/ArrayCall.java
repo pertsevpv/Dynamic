@@ -12,7 +12,6 @@ public class ArrayCall extends Call {
 
   public ArrayCall(Reference ref, Expr expr) {
     super(ref);
-    this.ref = ref;
     this.expr = expr;
   }
 
@@ -29,5 +28,10 @@ public class ArrayCall extends Call {
     ref.print(depth, sb);
     expr.print(depth, sb.append("["));
     sb.append("]");
+  }
+
+  @Override
+  public Expr optimize() {
+    return new ArrayCall(ref, expr.optimize());
   }
 }

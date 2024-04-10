@@ -6,7 +6,11 @@ import dynamic.semantic.Type;
 import dynamic.semantic.entity.Block;
 import dynamic.semantic.Span;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.lit.BoolConst;
+import dynamic.semantic.entity.expr.lit.Const;
 import dynamic.utils.CheckUtils;
+
+import java.lang.invoke.ConstantBootstraps;
 
 public class While extends Statement {
 
@@ -37,5 +41,15 @@ public class While extends Statement {
     sb.append(" loop\n");
     block.print(depth, sb);
     sb.append("  ".repeat(depth)).append("end");
+  }
+
+  @Override
+  public Statement optimize() {
+    var optimizedCond = cond.optimize();
+    if (optimizedCond instanceof BoolConst boolConst && !boolConst.value) {
+      System.out.format("%s cond in while is const false", span);
+      return null;
+    }
+    return new While(optimizedCond, block.optimize(), span);
   }
 }

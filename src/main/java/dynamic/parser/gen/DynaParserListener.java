@@ -208,6 +208,16 @@ public interface DynaParserListener extends ParseTreeListener {
 	 */
 	void exitReference(DynaParser.ReferenceContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DynaParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(DynaParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DynaParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(DynaParser.FunctionCallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DynaParser#loopBody}.
 	 * @param ctx the parse tree
 	 */

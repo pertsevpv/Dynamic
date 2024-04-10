@@ -5,6 +5,7 @@ import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
+import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.Printable;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.Pair;
@@ -43,7 +44,12 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     sb.append("}");
   }
 
-  public static class TupleElem implements Printable {
+  @Override
+  public Expr optimize() {
+    return new TupleConst(value.stream().map(Optimizable::optimize).toList(), span);
+  }
+
+  public static class TupleElem implements Printable, Optimizable<TupleElem> {
     public Id id;
     public Expr value;
 
@@ -66,6 +72,11 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     public void print(int depth, StringBuilder sb) {
       if (id != null) sb.append(id).append(" := ");
       value.print(depth, sb);
+    }
+
+    @Override
+    public TupleElem optimize() {
+      return new TupleElem(id, value.optimize());
     }
   }
 }

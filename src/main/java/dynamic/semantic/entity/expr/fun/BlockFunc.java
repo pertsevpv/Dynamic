@@ -4,6 +4,7 @@ import dynamic.exception.ValidationException;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Block;
 import dynamic.semantic.Span;
+import dynamic.semantic.entity.expr.Expr;
 
 import java.util.List;
 
@@ -41,5 +42,10 @@ public class BlockFunc extends Func {
     block.print(depth, sb);
     sb.append("  ".repeat(depth));
     sb.append("end\n\n");
+  }
+
+  @Override
+  public Expr optimize() {
+    return new BlockFunc(params, block.optimize(), span);
   }
 }

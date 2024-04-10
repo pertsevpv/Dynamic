@@ -27,4 +27,9 @@ public class DeclarationList extends Statement {
       sb.append("\n");
     }
   }
+
+  @Override
+  public Statement optimize() {
+    throw new UnsupportedOperationException();
+  }
 }

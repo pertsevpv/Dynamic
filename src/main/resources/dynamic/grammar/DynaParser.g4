@@ -23,6 +23,7 @@ statement
     | loop
     | return
     | print
+    | functionCall
     ;
 
 assignment
@@ -102,6 +103,11 @@ reference
     | reference '(' (expression (',' expression)*)? ')'
     | reference '.' IDENTIFIER
     | reference '.' INTEGER_LITERAL
+    ;
+
+// Cant write this rule in reference, cause ANTLR says it's left-rec
+functionCall
+    : reference '(' (expression (',' expression)*)? ')'
     ;
 
 loopBody

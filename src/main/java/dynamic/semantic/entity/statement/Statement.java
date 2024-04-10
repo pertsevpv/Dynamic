@@ -1,11 +1,12 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.semantic.Span;
+import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.Printable;
 import dynamic.semantic.entity.Validatable;
 import dynamic.utils.Pair;
 
-public abstract class Statement implements Validatable, Printable {
+public abstract class Statement implements Validatable, Printable, Optimizable<Statement> {
 
   public Span span;
   public boolean isReachable = true;

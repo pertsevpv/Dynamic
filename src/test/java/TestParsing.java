@@ -53,9 +53,10 @@ public class TestParsing {
     try {
       var walker = new DynaWalker(programCtx).analyze();
       StringBuilder sb = new StringBuilder();
-      walker.print(0, sb);
-      System.out.println(sb);
       walker.validate(new ValidationContext());
+      walker.optimize().print(0, sb);
+      System.out.println();
+      System.out.println(sb);
     } catch (ValidationException e) {
     e.printStackTrace();
 //      System.err.println(e.getMessage());

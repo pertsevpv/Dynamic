@@ -6,6 +6,7 @@ import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.ref.FunctionCall;
 import dynamic.utils.CheckUtils;
 
 public class Declaration extends Statement {
@@ -13,7 +14,7 @@ public class Declaration extends Statement {
   public Id name;
   public Expr expression;
   public Type type;
-  public boolean isRewrote = false;
+  public Assignment firstRewroteAssignment;
   public boolean isVariableUsed = true;
 
   public Declaration(Id name, Span span) {
@@ -44,5 +45,19 @@ public class Declaration extends Statement {
         .append("var ")
         .append(name);
     if (expression != null) expression.print(depth, sb.append(" := "));
+  }
+
+  @Override
+  public Statement optimize() {
+    if (firstRewroteAssignment != null) {
+      firstRewroteAssignment.rewroteToDeclaration = true;
+      return new Declaration(name, firstRewroteAssignment.expression.optimize(), span);
+    } else if (!isVariableUsed) {
+      if (expression instanceof FunctionCall call) {
+        return new CallStat(call.optimize());
+      } else return null;
+    }
+    if (expression == null) return new Declaration(name, span);
+    else return new Declaration(name, expression.optimize(), span);
   }
 }

@@ -7,4 +7,6 @@ public abstract class Reference extends Expr {
   public Reference(Span span) {
     super(span);
   }
+
+//  public abstract Reference optimize();
 }

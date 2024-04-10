@@ -3,6 +3,7 @@ package dynamic.semantic.entity.statement;
 import dynamic.exception.ValidationException;
 import dynamic.semantic.Span;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.expr.Expr;
 
 import java.util.List;
@@ -28,5 +29,10 @@ public class Print extends Statement {
         .append("print(")
         .append(exprs.stream().map(Expr::toString).collect(Collectors.joining(", ")))
         .append(")\n");
+  }
+
+  @Override
+  public Statement optimize() {
+    return new Print(exprs.stream().map(Optimizable::optimize).toList(), span);
   }
 }

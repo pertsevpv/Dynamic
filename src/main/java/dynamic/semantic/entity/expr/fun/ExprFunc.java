@@ -40,4 +40,9 @@ public class ExprFunc extends Func {
     sb.append(" => ");
     expr.print(depth, sb);
   }
+
+  @Override
+  public Expr optimize() {
+    return new ExprFunc(params, expr.optimize(), span);
+  }
 }

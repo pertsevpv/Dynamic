@@ -29,4 +29,10 @@ public class Return extends Statement {
         .append("return");
     if (expr != null) expr.print(depth, sb.append(" "));
   }
+
+  @Override
+  public Statement optimize() {
+    if (expr == null) return new Return(span);
+    else return new Return(expr.optimize(), span);
+  }
 }

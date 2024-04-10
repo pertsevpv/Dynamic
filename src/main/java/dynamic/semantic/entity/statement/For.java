@@ -54,4 +54,9 @@ public class For extends Statement {
     sb.append("  ".repeat(depth))
         .append("end");
   }
+
+  @Override
+  public Statement optimize() {
+    return new For(param.optimize(), from.optimize(), to.optimize(), block.optimize(), span);
+  }
 }

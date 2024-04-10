@@ -4,6 +4,7 @@ import dynamic.exception.ValidationException;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.lit.BoolConst;
 import dynamic.utils.Pair;
 import dynamic.utils.TypeUtils;
 
@@ -32,6 +33,13 @@ public class UnOperation extends Expr {
     sb.append(opType.sign).append("(");
     expr.print(depth, sb);
     sb.append(")");
+  }
+
+  @Override
+  public Expr optimize() {
+    var optExpr = expr.optimize();
+    if (opType == OpType.NOT && optExpr instanceof BoolConst boolConst) return new BoolConst(boolConst.value, span);
+    else return new UnOperation(optExpr, opType);
   }
 
   public enum OpType {

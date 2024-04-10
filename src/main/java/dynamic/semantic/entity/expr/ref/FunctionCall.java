@@ -3,6 +3,7 @@ package dynamic.semantic.entity.expr.ref;
 import dynamic.exception.ValidationException;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.expr.fun.Func;
 import dynamic.utils.CheckUtils;
@@ -46,5 +47,11 @@ public class FunctionCall extends Call {
         params.get(i).print(depth, sb.append(", "));
     }
     sb.append(")");
+  }
+
+  @Override
+  public FunctionCall optimize() {
+    var optimizedParams = params.stream().map(Optimizable::optimize).toList();
+    return new FunctionCall(ref, optimizedParams);
   }
 }

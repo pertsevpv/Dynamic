@@ -3,6 +3,7 @@ package dynamic.semantic.entity.expr.read;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.expr.Expr;
 
 public class ReadInt extends Read<Integer> {
   public ReadInt(Span span) {
@@ -17,5 +18,10 @@ public class ReadInt extends Read<Integer> {
   @Override
   public void print(int depth, StringBuilder sb) {
     sb.append("readInt");
+  }
+
+  @Override
+  public Expr optimize() {
+    return new ReadInt(span);
   }
 }
