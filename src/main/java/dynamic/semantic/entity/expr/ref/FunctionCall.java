@@ -8,7 +8,6 @@ import dynamic.semantic.entity.expr.fun.Func;
 import dynamic.utils.CheckUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FunctionCall extends Call {
 
@@ -26,9 +25,7 @@ public class FunctionCall extends Call {
 
     if (ref instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
-      var type = context.getType(idRef.id.name);
       var expr = context.getExpr(idRef.id.name);
-      CheckUtils.checkTypes(Type.FUNC, type, span);
       CheckUtils.checkTypes(Type.FUNC, expr);
       if (expr instanceof Func func) {
         if (func.params.size() != params.size()) {

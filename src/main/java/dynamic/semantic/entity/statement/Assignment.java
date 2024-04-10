@@ -2,6 +2,7 @@ package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.semantic.entity.Id;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.expr.ref.IdRef;
 import dynamic.semantic.entity.expr.ref.Reference;
@@ -11,6 +12,7 @@ public class Assignment extends Statement {
 
   public Reference reference;
   public Expr expression;
+  public boolean isRewrote = false;
 
   public Assignment(Reference reference, Expr expression) {
     super(reference.span);
@@ -20,13 +22,13 @@ public class Assignment extends Statement {
 
   @Override
   public void validate(ValidationContext context) throws ValidationException {
-    reference.validate(context);
-    expression.validate(context);
-
     if (reference instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
-      context.rewriteVar(idRef.id.name, expression);
+    } else {
+      reference.validate(context);
     }
+    expression.validate(context);
+    if (reference instanceof IdRef idRef) context.rewriteVar(idRef.id.name, this);
   }
 
   @Override

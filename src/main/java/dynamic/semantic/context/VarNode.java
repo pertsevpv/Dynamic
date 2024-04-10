@@ -1,18 +1,20 @@
 package dynamic.semantic.context;
 
-import dynamic.semantic.Type;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.statement.Assignment;
 import dynamic.semantic.entity.statement.Declaration;
 
 public class VarNode {
 
   public Declaration initialDeclaration;
-  public Expr currentExpression;
-  public Type currentType;
+  public Assignment lastAssignment;
 
-  public VarNode(Declaration initialDeclaration, Expr currentExpression, Type currentType) {
+  public VarNode(Declaration initialDeclaration) {
     this.initialDeclaration = initialDeclaration;
-    this.currentExpression = currentExpression;
-    this.currentType = currentType;
+  }
+
+  public Expr getExpr() {
+    if (lastAssignment != null) return lastAssignment.expression;
+    else return initialDeclaration.expression;
   }
 }

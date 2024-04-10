@@ -13,4 +13,11 @@ public abstract class Statement implements Validatable, Printable {
   public Statement(Span span) {
     this.span = span;
   }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    print(0, sb);
+    return sb.toString();
+  }
 }

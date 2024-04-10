@@ -13,6 +13,7 @@ public class Declaration extends Statement {
   public Id name;
   public Expr expression;
   public Type type;
+  public boolean isRewrote = false;
   public boolean isVariableUsed = true;
 
   public Declaration(Id name, Span span) {

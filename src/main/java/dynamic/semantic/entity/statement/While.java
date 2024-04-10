@@ -20,11 +20,6 @@ public class While extends Statement {
   }
 
   @Override
-  public String toString() {
-    return "while %s %s".formatted(cond, block);
-  }
-
-  @Override
   public void validate(ValidationContext context) throws ValidationException {
     cond.validate(context);
     CheckUtils.checkTypes(Type.BOOL, cond);

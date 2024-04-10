@@ -1,7 +1,7 @@
 package dynamic.semantic.context;
 
-import dynamic.semantic.Type;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.statement.Assignment;
 import dynamic.semantic.entity.statement.Declaration;
 
 public class ValidationContext {
@@ -13,15 +13,12 @@ public class ValidationContext {
   }
 
   public void exitScope() {
+    varMap.markUnused();
     varMap = varMap.parent;
   }
 
   public void putDeclaration(Declaration declaration) {
     varMap.putDeclaration(declaration);
-  }
-
-  public Declaration getDeclaration(String name) {
-    return varMap.getDecl(name);
   }
 
   public boolean containDecl(String name) {
@@ -36,11 +33,7 @@ public class ValidationContext {
     return varMap.getExpr(name);
   }
 
-  public Type getType(String name) {
-    return varMap.getType(name);
-  }
-
-  public void rewriteVar(String name, Expr expr) {
-    varMap.rewriteVar(name, expr);
+  public void rewriteVar(String name, Assignment assignment) {
+    varMap.rewriteVar(name, assignment);
   }
 }

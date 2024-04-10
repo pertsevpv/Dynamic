@@ -17,19 +17,14 @@ public class Block implements Validatable, Printable {
   }
 
   @Override
-  public String toString() {
-    if (block.size() == 1) return block.get(0).toString();
-    return block.stream()
-        .map(Statement::toString)
-        .collect(Collectors.joining("\n", "{\n", "\n}"));
-  }
-
-  @Override
   public void validate(ValidationContext context) throws ValidationException {
     boolean hasReturn = false;
     for (var stat: block) {
       stat.validate(context);
-      if (hasReturn) stat.isReachable = false;
+      if (hasReturn) {
+        System.out.format("%s statement %s is unreachable\n", stat.span, stat);
+        stat.isReachable = false;
+      }
       if (stat instanceof Return) hasReturn = true;
     }
   }
