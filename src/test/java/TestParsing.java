@@ -1,5 +1,8 @@
+import dynamic.exception.ValidationException;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
+import dynamic.semantic.DynaWalker;
+import dynamic.semantic.context.ValidationContext;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -38,6 +41,28 @@ public class TestParsing {
     });
   }
 
+  @Test
+  public void testSemantic() {
+    String source = readFile("mergeSort.d");
+    var lexer = new DynaLexer(CharStreams.fromString(source));
+    var tokenStream = new CommonTokenStream(lexer);
+    tokenStream.fill();
+    var parser = new DynaParser(tokenStream);
+    parser.setErrorHandler(new BailErrorStrategy());
+    var programCtx = parser.program();
+    try {
+      var walker = new DynaWalker(programCtx).analyze();
+      StringBuilder sb = new StringBuilder();
+      walker.validate(new ValidationContext());
+      walker.optimize().print(0, sb);
+      System.out.println();
+      System.out.println(sb);
+    } catch (ValidationException e) {
+    e.printStackTrace();
+//      System.err.println(e.getMessage());
+    }
+  }
+
   private String readFile(String filename) {
     try {
       return Files.readString(Path.of("src", "test", "resources", "examples", filename));
@@ -73,5 +98,4 @@ public class TestParsing {
       System.out.print(ruleName);
     }
   }
-
 }

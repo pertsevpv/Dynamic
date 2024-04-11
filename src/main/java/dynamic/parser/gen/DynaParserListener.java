@@ -48,15 +48,15 @@ public interface DynaParserListener extends ParseTreeListener {
 	 */
 	void exitStatement(DynaParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DynaParser#assigment}.
+	 * Enter a parse tree produced by {@link DynaParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void enterAssigment(DynaParser.AssigmentContext ctx);
+	void enterAssignment(DynaParser.AssignmentContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DynaParser#assigment}.
+	 * Exit a parse tree produced by {@link DynaParser#assignment}.
 	 * @param ctx the parse tree
 	 */
-	void exitAssigment(DynaParser.AssigmentContext ctx);
+	void exitAssignment(DynaParser.AssignmentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DynaParser#if}.
 	 * @param ctx the parse tree
@@ -208,6 +208,16 @@ public interface DynaParserListener extends ParseTreeListener {
 	 */
 	void exitReference(DynaParser.ReferenceContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DynaParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(DynaParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DynaParser#functionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(DynaParser.FunctionCallContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DynaParser#loopBody}.
 	 * @param ctx the parse tree
 	 */
@@ -247,6 +257,16 @@ public interface DynaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTupleLiteral(DynaParser.TupleLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DynaParser#tupleElem}.
+	 * @param ctx the parse tree
+	 */
+	void enterTupleElem(DynaParser.TupleElemContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DynaParser#tupleElem}.
+	 * @param ctx the parse tree
+	 */
+	void exitTupleElem(DynaParser.TupleElemContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DynaParser#body}.
 	 * @param ctx the parse tree

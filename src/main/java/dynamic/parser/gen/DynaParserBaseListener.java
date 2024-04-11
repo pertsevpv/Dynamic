@@ -65,13 +65,13 @@ public class DynaParserBaseListener implements DynaParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssigment(DynaParser.AssigmentContext ctx) { }
+	@Override public void enterAssignment(DynaParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssigment(DynaParser.AssigmentContext ctx) { }
+	@Override public void exitAssignment(DynaParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -257,6 +257,18 @@ public class DynaParserBaseListener implements DynaParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFunctionCall(DynaParser.FunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionCall(DynaParser.FunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLoopBody(DynaParser.LoopBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -300,6 +312,18 @@ public class DynaParserBaseListener implements DynaParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTupleLiteral(DynaParser.TupleLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTupleElem(DynaParser.TupleElemContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTupleElem(DynaParser.TupleElemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
