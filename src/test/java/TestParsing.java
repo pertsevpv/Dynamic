@@ -98,5 +98,4 @@ public class TestParsing {
       System.out.print(ruleName);
     }
   }
-
 }
