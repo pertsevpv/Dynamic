@@ -49,13 +49,13 @@ public class Declaration extends Statement {
 
   @Override
   public Statement optimize() {
-    if (firstRewroteAssignment != null) {
-      firstRewroteAssignment.rewroteToDeclaration = true;
-      return new Declaration(name, firstRewroteAssignment.expression.optimize(), span);
-    } else if (!isVariableUsed) {
+    if (!isVariableUsed) {
       if (expression instanceof FunctionCall call) {
         return new CallStat(call.optimize());
       } else return null;
+    } else if (firstRewroteAssignment != null) {
+      firstRewroteAssignment.rewroteToDeclaration = true;
+      return new Declaration(name, firstRewroteAssignment.expression.optimize(), span);
     }
     if (expression == null) return new Declaration(name, span);
     else return new Declaration(name, expression.optimize(), span);

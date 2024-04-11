@@ -13,7 +13,7 @@ public class ValidationContext {
   }
 
   public void exitScope() {
-    varMap.markUnused();
+    varMap.markUnusedDecl();
     varMap = varMap.parent;
   }
 
@@ -31,6 +31,9 @@ public class ValidationContext {
 
   public Expr getExpr(String name) {
     return varMap.getExpr(name);
+  }
+  public Declaration getDecl(String name) {
+    return varMap.getDecl(name);
   }
 
   public void rewriteVar(String name, Assignment assignment) {

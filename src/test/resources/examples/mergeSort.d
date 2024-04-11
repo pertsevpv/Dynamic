@@ -5,6 +5,7 @@ var subArray := func(a, from, to) is
       result[ind] := a[j]
       ind := ind + 1
     end
+    ind := 1
     return result
 end
 

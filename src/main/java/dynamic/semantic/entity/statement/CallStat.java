@@ -10,10 +10,12 @@ public class CallStat extends Statement {
 
   public CallStat(FunctionCall call) {
     super(call.span);
+    this.call = call;
   }
 
   @Override
   public void print(int depth, StringBuilder sb) {
+    sb.append("  ".repeat(depth));
     call.print(depth, sb);
   }
 
