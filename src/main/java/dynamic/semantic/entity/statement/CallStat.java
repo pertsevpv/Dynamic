@@ -1,6 +1,9 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.ref.FunctionCall;
 
@@ -27,5 +30,11 @@ public class CallStat extends Statement {
   @Override
   public CallStat optimize() {
     return new CallStat(call.optimize());
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    call.execute(memory, valueStack, stackFrame);
+    valueStack.pop();
   }
 }

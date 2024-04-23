@@ -1,6 +1,10 @@
 package dynamic.semantic.entity.expr.fun;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaFunc;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Block;
 import dynamic.semantic.Span;
@@ -47,5 +51,11 @@ public class BlockFunc extends Func {
   @Override
   public Expr optimize() {
     return new BlockFunc(params, block.optimize(), span);
+  }
+
+  @Override
+  public void call(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.call(memory, valueStack, stackFrame);
+    block.execute(memory, valueStack, stackFrame);
   }
 }

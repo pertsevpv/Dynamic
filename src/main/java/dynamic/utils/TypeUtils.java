@@ -11,7 +11,7 @@ import java.util.List;
 public class TypeUtils {
 
   public static boolean checkType(Type expected, Type got) {
-    return got == null || expected == got;
+    return expected == null || got == null || expected == got;
   }
 
   public static Type checkUnOpType(
@@ -81,7 +81,13 @@ public class TypeUtils {
           new Triple<>(Type.INT, Type.REAL, Type.REAL),
           new Triple<>(Type.REAL, Type.REAL, Type.REAL),
           new Triple<>(Type.ARRAY, Type.ARRAY, Type.ARRAY),
-          new Triple<>(Type.TUPLE, Type.TUPLE, Type.TUPLE)
+          new Triple<>(Type.TUPLE, Type.TUPLE, Type.TUPLE),
+          new Triple<>(null, Type.STRING, Type.STRING),
+          new Triple<>(Type.STRING, null, Type.STRING)
+      );
+      case REF_EQ, REF_NOT_EQ -> List.of();
+      case MOD -> List.of(
+          new Triple<>(Type.INT, Type.INT, Type.INT)
       );
     };
   }

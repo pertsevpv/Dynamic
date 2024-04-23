@@ -2,7 +2,6 @@ package dynamic.semantic.entity.expr.fun;
 
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.entity.statement.Declaration;
-import dynamic.semantic.entity.statement.Statement;
 
 public class Parameter extends Declaration {
 

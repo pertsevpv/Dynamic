@@ -1,5 +1,11 @@
 package dynamic.semantic.entity.expr.read;
 
+import dynamic.interpret.Context;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaInteger;
+import dynamic.interpret.obj.DynaReal;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
@@ -23,5 +29,10 @@ public class ReadReal extends Read<Double> {
   @Override
   public Expr optimize() {
     return new ReadReal(span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    valueStack.push(new DynaReal(Context.nextDouble()));
   }
 }

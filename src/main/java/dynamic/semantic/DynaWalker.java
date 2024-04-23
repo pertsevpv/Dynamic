@@ -222,6 +222,7 @@ public class DynaWalker {
     }
     if (ctx.STRING_LITERAL() != null) {
       String val = ctx.STRING_LITERAL().getText();
+      val = val.substring(1, val.length() - 1);
       return new StringConst(val, span);
     }
     if (ctx.arrayLiteral() != null) {
@@ -306,6 +307,7 @@ public class DynaWalker {
       case "-" -> BiOperation.OpType.MINUS;
       case "*" -> BiOperation.OpType.TIMES;
       case "/" -> BiOperation.OpType.DIV;
+      case "%" -> BiOperation.OpType.MOD;
 
       case "and" -> BiOperation.OpType.AND;
       case "or" -> BiOperation.OpType.OR;
@@ -317,6 +319,9 @@ public class DynaWalker {
       case "/=" -> BiOperation.OpType.NOT_EQ;
       case ">" -> BiOperation.OpType.GR;
       case "=>" -> BiOperation.OpType.GR_EQ;
+
+      case "==" -> BiOperation.OpType.REF_EQ;
+      case "/==" -> BiOperation.OpType.REF_NOT_EQ;
 
       default -> throw new IllegalArgumentException();
     };

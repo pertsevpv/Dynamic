@@ -1,6 +1,9 @@
 package dynamic.semantic.entity.expr.fun;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.Span;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
@@ -18,8 +21,8 @@ public class ExprFunc extends Func {
 
   @Override
   public void validate(ValidationContext context) throws ValidationException {
-    for (var p: params) p.validate(context);
     context.enterScope();
+    for (var p: params) p.validate(context);
     for (var p: params) context.putDeclaration(p);
     expr.validate(context);
     context.exitScope();
@@ -44,5 +47,13 @@ public class ExprFunc extends Func {
   @Override
   public Expr optimize() {
     return new ExprFunc(params, expr.optimize(), span);
+  }
+
+  @Override
+  public void call(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.call(memory, valueStack, stackFrame);
+    expr.execute(memory, valueStack, stackFrame);
+    var ret = valueStack.pop();
+    stackFrame.sendResult(memory, ret);
   }
 }

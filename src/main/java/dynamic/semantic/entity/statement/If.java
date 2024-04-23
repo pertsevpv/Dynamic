@@ -1,6 +1,11 @@
 package dynamic.semantic.entity.statement;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaBool;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
@@ -57,5 +62,20 @@ public class If extends Statement {
   @Override
   public Statement optimize() {
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    cond.execute(memory, valueStack, stackFrame);
+    var condObj = valueStack.pop();
+    if (!(condObj instanceof DynaBool condBool)) throw new DynaRuntimeException();
+
+    stackFrame.enterScope();
+    if (condBool.value) {
+      ifBlock.execute(memory, valueStack, stackFrame);
+    } else if (elseBlock != null) {
+      elseBlock.execute(memory, valueStack, stackFrame);
+    }
+    stackFrame.exitScope();
   }
 }

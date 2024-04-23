@@ -1,4 +1,5 @@
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Context;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
@@ -18,7 +19,7 @@ public class TestParsing {
 
   @Test
   public void testLexing() {
-    String source = readFile("mergeSort.d");
+    String source = readFile("binSearch.d");
     Assertions.assertDoesNotThrow(() -> {
       var lexer = new DynaLexer(CharStreams.fromString(source));
       var tokenStream = new CommonTokenStream(lexer);
@@ -43,7 +44,7 @@ public class TestParsing {
 
   @Test
   public void testSemantic() {
-    String source = readFile("mergeSort.d");
+    String source = readFile("binSearch.d");
     var lexer = new DynaLexer(CharStreams.fromString(source));
     var tokenStream = new CommonTokenStream(lexer);
     tokenStream.fill();
@@ -59,6 +60,27 @@ public class TestParsing {
       System.out.println(sb);
     } catch (ValidationException e) {
     e.printStackTrace();
+//      System.err.println(e.getMessage());
+    }
+  }
+
+  @Test
+  public void testExecute() {
+    int i = Context.nextInt();
+    System.out.println(i);
+    String source = readFile("test.d");
+    var lexer = new DynaLexer(CharStreams.fromString(source));
+    var tokenStream = new CommonTokenStream(lexer);
+    tokenStream.fill();
+    var parser = new DynaParser(tokenStream);
+    parser.setErrorHandler(new BailErrorStrategy());
+    var programCtx = parser.program();
+    try {
+      var walker = new DynaWalker(programCtx).analyze();
+      walker.validate(new ValidationContext());
+      walker.execute();
+    } catch (ValidationException e) {
+      e.printStackTrace();
 //      System.err.println(e.getMessage());
     }
   }

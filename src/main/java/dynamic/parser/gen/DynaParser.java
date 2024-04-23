@@ -21,10 +21,11 @@ public class DynaParser extends DynaParserBase {
 		NOT=10, IF=11, THEN=12, ELSE=13, END=14, WHILE=15, LOOP=16, FOR=17, IN=18, 
 		RETURN=19, IS=20, PRINT=21, VAR=22, READ_INT=23, READ_REAL=24, READ_STRING=25, 
 		LCURLY=26, RCURLY=27, LPAREN=28, RPAREN=29, LBRACK=30, RBRACK=31, LE=32, 
-		LE_EQ=33, GR=34, GR_EQ=35, EQ=36, NOT_EQ=37, PLUS=38, MINUS=39, MUL=40, 
-		DIV=41, INT=42, REAL=43, BOOL=44, STRING=45, EMPTY=46, FUNC=47, IDENTIFIER=48, 
-		BOOLEAN_LITERAL=49, INTEGER_LITERAL=50, REAL_LITERAL=51, STRING_LITERAL=52, 
-		WS=53, COMMENT=54, LINE_COMMENT=55, NEW_LINE=56;
+		LE_EQ=33, GR=34, GR_EQ=35, EQ=36, REF_EQ=37, NOT_EQ=38, NOT_RED_EQ=39, 
+		PLUS=40, MINUS=41, MUL=42, DIV=43, MOD=44, INT=45, REAL=46, BOOL=47, STRING=48, 
+		EMPTY=49, FUNC=50, BOOLEAN_LITERAL=51, INTEGER_LITERAL=52, REAL_LITERAL=53, 
+		STRING_LITERAL=54, IDENTIFIER=55, WS=56, COMMENT=57, LINE_COMMENT=58, 
+		NEW_LINE=59;
 	public static final int
 		RULE_program = 0, RULE_declaration = 1, RULE_variableDefinition = 2, RULE_statement = 3, 
 		RULE_assignment = 4, RULE_if = 5, RULE_loop = 6, RULE_return = 7, RULE_print = 8, 
@@ -50,8 +51,8 @@ public class DynaParser extends DynaParserBase {
 			"'not'", "'if'", "'then'", "'else'", "'end'", "'while'", "'loop'", "'for'", 
 			"'in'", "'return'", "'is'", "'print'", "'var'", "'readInt'", "'readReal'", 
 			"'readString'", "'{'", "'}'", "'('", "')'", "'['", "']'", "'<'", "'<='", 
-			"'>'", "'>='", "'='", "'/='", "'+'", "'-'", "'*'", "'/'", "'int'", "'real'", 
-			"'bool'", "'string'", "'empty'", "'func'"
+			"'>'", "'>='", "'='", "'=='", "'/='", "'/=='", "'+'", "'-'", "'*'", "'/'", 
+			"'%'", "'int'", "'real'", "'bool'", "'string'", "'empty'", "'func'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -61,10 +62,10 @@ public class DynaParser extends DynaParserBase {
 			"XOR", "NOT", "IF", "THEN", "ELSE", "END", "WHILE", "LOOP", "FOR", "IN", 
 			"RETURN", "IS", "PRINT", "VAR", "READ_INT", "READ_REAL", "READ_STRING", 
 			"LCURLY", "RCURLY", "LPAREN", "RPAREN", "LBRACK", "RBRACK", "LE", "LE_EQ", 
-			"GR", "GR_EQ", "EQ", "NOT_EQ", "PLUS", "MINUS", "MUL", "DIV", "INT", 
-			"REAL", "BOOL", "STRING", "EMPTY", "FUNC", "IDENTIFIER", "BOOLEAN_LITERAL", 
-			"INTEGER_LITERAL", "REAL_LITERAL", "STRING_LITERAL", "WS", "COMMENT", 
-			"LINE_COMMENT", "NEW_LINE"
+			"GR", "GR_EQ", "EQ", "REF_EQ", "NOT_EQ", "NOT_RED_EQ", "PLUS", "MINUS", 
+			"MUL", "DIV", "MOD", "INT", "REAL", "BOOL", "STRING", "EMPTY", "FUNC", 
+			"BOOLEAN_LITERAL", "INTEGER_LITERAL", "REAL_LITERAL", "STRING_LITERAL", 
+			"IDENTIFIER", "WS", "COMMENT", "LINE_COMMENT", "NEW_LINE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -157,7 +158,7 @@ public class DynaParser extends DynaParserBase {
 			setState(61);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474983692288L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 36028797025945600L) != 0)) {
 				{
 				{
 				setState(56);
@@ -847,6 +848,8 @@ public class DynaParser extends DynaParserBase {
 		public TerminalNode GR_EQ() { return getToken(DynaParser.GR_EQ, 0); }
 		public TerminalNode EQ() { return getToken(DynaParser.EQ, 0); }
 		public TerminalNode NOT_EQ() { return getToken(DynaParser.NOT_EQ, 0); }
+		public TerminalNode REF_EQ() { return getToken(DynaParser.REF_EQ, 0); }
+		public TerminalNode NOT_RED_EQ() { return getToken(DynaParser.NOT_RED_EQ, 0); }
 		public RelationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -878,7 +881,7 @@ public class DynaParser extends DynaParserBase {
 				setState(140);
 				((RelationContext)_localctx).sign = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 270582939648L) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1095216660480L) != 0)) ) {
 					((RelationContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -906,10 +909,10 @@ public class DynaParser extends DynaParserBase {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FactorContext extends ParserRuleContext {
-		public Token s38;
+		public Token s40;
 		public List<Token> sign = new ArrayList<Token>();
-		public Token s39;
-		public Token _tset278;
+		public Token s41;
+		public Token _tset286;
 		public List<TermContext> term() {
 			return getRuleContexts(TermContext.class);
 		}
@@ -956,17 +959,17 @@ public class DynaParser extends DynaParserBase {
 					{
 					{
 					setState(145);
-					((FactorContext)_localctx)._tset278 = _input.LT(1);
+					((FactorContext)_localctx)._tset286 = _input.LT(1);
 					_la = _input.LA(1);
 					if ( !(_la==PLUS || _la==MINUS) ) {
-						((FactorContext)_localctx)._tset278 = (Token)_errHandler.recoverInline(this);
+						((FactorContext)_localctx)._tset286 = (Token)_errHandler.recoverInline(this);
 					}
 					else {
 						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
 						_errHandler.reportMatch(this);
 						consume();
 					}
-					((FactorContext)_localctx).sign.add(((FactorContext)_localctx)._tset278);
+					((FactorContext)_localctx).sign.add(((FactorContext)_localctx)._tset286);
 					setState(146);
 					term();
 					}
@@ -991,10 +994,11 @@ public class DynaParser extends DynaParserBase {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class TermContext extends ParserRuleContext {
-		public Token s40;
+		public Token s42;
 		public List<Token> sign = new ArrayList<Token>();
-		public Token s41;
-		public Token _tset301;
+		public Token s43;
+		public Token s44;
+		public Token _tset309;
 		public List<UnaryContext> unary() {
 			return getRuleContexts(UnaryContext.class);
 		}
@@ -1008,6 +1012,10 @@ public class DynaParser extends DynaParserBase {
 		public List<TerminalNode> DIV() { return getTokens(DynaParser.DIV); }
 		public TerminalNode DIV(int i) {
 			return getToken(DynaParser.DIV, i);
+		}
+		public List<TerminalNode> MOD() { return getTokens(DynaParser.MOD); }
+		public TerminalNode MOD(int i) {
+			return getToken(DynaParser.MOD, i);
 		}
 		public TermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1041,17 +1049,17 @@ public class DynaParser extends DynaParserBase {
 					{
 					{
 					setState(153);
-					((TermContext)_localctx)._tset301 = _input.LT(1);
+					((TermContext)_localctx)._tset309 = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(_la==MUL || _la==DIV) ) {
-						((TermContext)_localctx)._tset301 = (Token)_errHandler.recoverInline(this);
+					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 30786325577728L) != 0)) ) {
+						((TermContext)_localctx)._tset309 = (Token)_errHandler.recoverInline(this);
 					}
 					else {
 						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
 						_errHandler.reportMatch(this);
 						consume();
 					}
-					((TermContext)_localctx).sign.add(((TermContext)_localctx)._tset301);
+					((TermContext)_localctx).sign.add(((TermContext)_localctx)._tset309);
 					setState(154);
 					unary();
 					}
@@ -1155,7 +1163,7 @@ public class DynaParser extends DynaParserBase {
 					setState(165);
 					((UnaryContext)_localctx).sign = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 824633721856L) != 0)) ) {
+					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 3298534884352L) != 0)) ) {
 						((UnaryContext)_localctx).sign = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -1699,7 +1707,7 @@ public class DynaParser extends DynaParserBase {
 						setState(241);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
-						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8867287868113920L) != 0)) {
+						if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70934994133976064L) != 0)) {
 							{
 							setState(233);
 							expression();
@@ -1815,7 +1823,7 @@ public class DynaParser extends DynaParserBase {
 			setState(265);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8867287868113920L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70934994133976064L) != 0)) {
 				{
 				setState(257);
 				expression();
@@ -2029,7 +2037,7 @@ public class DynaParser extends DynaParserBase {
 			setState(290);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8867287868113920L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70934994133976064L) != 0)) {
 				{
 				setState(282);
 				expression();
@@ -2107,7 +2115,7 @@ public class DynaParser extends DynaParserBase {
 			setState(303);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8867287868113920L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 70934994133976064L) != 0)) {
 				{
 				setState(295);
 				tupleElem();
@@ -2237,7 +2245,7 @@ public class DynaParser extends DynaParserBase {
 			setState(318);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474983692288L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 36028797025945600L) != 0)) {
 				{
 				{
 				setState(313);
@@ -2353,7 +2361,7 @@ public class DynaParser extends DynaParserBase {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u00018\u0147\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001;\u0147\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -2406,8 +2414,8 @@ public class DynaParser extends DynaParserBase {
 		"\f\u001a\u0140\t\u001a\u0001\u001b\u0001\u001b\u0001\u001b\u0003\u001b"+
 		"\u0145\b\u001b\u0001\u001b\u0000\u0001&\u001c\u0000\u0002\u0004\u0006"+
 		"\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,."+
-		"0246\u0000\u0005\u0001\u0000\u0007\t\u0001\u0000 %\u0001\u0000&\'\u0001"+
-		"\u0000()\u0002\u0000\n\n&\'\u0164\u0000=\u0001\u0000\u0000\u0000\u0002"+
+		"0246\u0000\u0005\u0001\u0000\u0007\t\u0001\u0000 \'\u0001\u0000()\u0001"+
+		"\u0000*,\u0002\u0000\n\n()\u0164\u0000=\u0001\u0000\u0000\u0000\u0002"+
 		"B\u0001\u0000\u0000\u0000\u0004K\u0001\u0000\u0000\u0000\u0006W\u0001"+
 		"\u0000\u0000\u0000\bY\u0001\u0000\u0000\u0000\n]\u0001\u0000\u0000\u0000"+
 		"\ft\u0001\u0000\u0000\u0000\u000ev\u0001\u0000\u0000\u0000\u0010z\u0001"+
@@ -2427,7 +2435,7 @@ public class DynaParser extends DynaParserBase {
 		"BC\u0005\u0016\u0000\u0000CH\u0003\u0004\u0002\u0000DE\u0005\u0003\u0000"+
 		"\u0000EG\u0003\u0004\u0002\u0000FD\u0001\u0000\u0000\u0000GJ\u0001\u0000"+
 		"\u0000\u0000HF\u0001\u0000\u0000\u0000HI\u0001\u0000\u0000\u0000I\u0003"+
-		"\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000\u0000KN\u00050\u0000\u0000"+
+		"\u0001\u0000\u0000\u0000JH\u0001\u0000\u0000\u0000KN\u00057\u0000\u0000"+
 		"LM\u0005\u0004\u0000\u0000MO\u0003\u0012\t\u0000NL\u0001\u0000\u0000\u0000"+
 		"NO\u0001\u0000\u0000\u0000O\u0005\u0001\u0000\u0000\u0000PX\u0003\u0002"+
 		"\u0001\u0000QX\u0003\b\u0004\u0000RX\u0003\n\u0005\u0000SX\u0003\f\u0006"+
@@ -2442,7 +2450,7 @@ public class DynaParser extends DynaParserBase {
 		"de\u0001\u0000\u0000\u0000ef\u0005\u000e\u0000\u0000f\u000b\u0001\u0000"+
 		"\u0000\u0000gh\u0005\u000f\u0000\u0000hi\u0003\u0012\t\u0000ij\u0003*"+
 		"\u0015\u0000ju\u0001\u0000\u0000\u0000kl\u0005\u0011\u0000\u0000lm\u0005"+
-		"0\u0000\u0000mn\u0005\u0012\u0000\u0000no\u0003\u0012\t\u0000op\u0005"+
+		"7\u0000\u0000mn\u0005\u0012\u0000\u0000no\u0003\u0012\t\u0000op\u0005"+
 		"\u0005\u0000\u0000pq\u0003\u0012\t\u0000qr\u0001\u0000\u0000\u0000rs\u0003"+
 		"*\u0015\u0000su\u0001\u0000\u0000\u0000tg\u0001\u0000\u0000\u0000tk\u0001"+
 		"\u0000\u0000\u0000u\r\u0001\u0000\u0000\u0000vx\u0005\u0013\u0000\u0000"+
@@ -2479,25 +2487,25 @@ public class DynaParser extends DynaParserBase {
 		"\u0000\u00ae\u00b7\u0005\u0019\u0000\u0000\u00af\u00b7\u0003 \u0010\u0000"+
 		"\u00b0\u00b1\u0005\u001c\u0000\u0000\u00b1\u00b2\u0003\u0012\t\u0000\u00b2"+
 		"\u00b3\u0005\u001d\u0000\u0000\u00b3\u00b7\u0001\u0000\u0000\u0000\u00b4"+
-		"\u00b5\u0005\'\u0000\u0000\u00b5\u00b7\u0003\u0012\t\u0000\u00b6\u00ab"+
+		"\u00b5\u0005)\u0000\u0000\u00b5\u00b7\u0003\u0012\t\u0000\u00b6\u00ab"+
 		"\u0001\u0000\u0000\u0000\u00b6\u00ac\u0001\u0000\u0000\u0000\u00b6\u00ad"+
 		"\u0001\u0000\u0000\u0000\u00b6\u00ae\u0001\u0000\u0000\u0000\u00b6\u00af"+
 		"\u0001\u0000\u0000\u0000\u00b6\u00b0\u0001\u0000\u0000\u0000\u00b6\u00b4"+
 		"\u0001\u0000\u0000\u0000\u00b7\u001d\u0001\u0000\u0000\u0000\u00b8\u00c3"+
-		"\u0005*\u0000\u0000\u00b9\u00c3\u0005+\u0000\u0000\u00ba\u00c3\u0005,"+
-		"\u0000\u0000\u00bb\u00c3\u0005-\u0000\u0000\u00bc\u00c3\u0005.\u0000\u0000"+
+		"\u0005-\u0000\u0000\u00b9\u00c3\u0005.\u0000\u0000\u00ba\u00c3\u0005/"+
+		"\u0000\u0000\u00bb\u00c3\u00050\u0000\u0000\u00bc\u00c3\u00051\u0000\u0000"+
 		"\u00bd\u00be\u0005\u001e\u0000\u0000\u00be\u00c3\u0005\u001f\u0000\u0000"+
 		"\u00bf\u00c0\u0005\u001a\u0000\u0000\u00c0\u00c3\u0005\u001b\u0000\u0000"+
-		"\u00c1\u00c3\u0005/\u0000\u0000\u00c2\u00b8\u0001\u0000\u0000\u0000\u00c2"+
+		"\u00c1\u00c3\u00052\u0000\u0000\u00c2\u00b8\u0001\u0000\u0000\u0000\u00c2"+
 		"\u00b9\u0001\u0000\u0000\u0000\u00c2\u00ba\u0001\u0000\u0000\u0000\u00c2"+
 		"\u00bb\u0001\u0000\u0000\u0000\u00c2\u00bc\u0001\u0000\u0000\u0000\u00c2"+
 		"\u00bd\u0001\u0000\u0000\u0000\u00c2\u00bf\u0001\u0000\u0000\u0000\u00c2"+
 		"\u00c1\u0001\u0000\u0000\u0000\u00c3\u001f\u0001\u0000\u0000\u0000\u00c4"+
-		"\u00c6\u0005/\u0000\u0000\u00c5\u00c7\u0003\"\u0011\u0000\u00c6\u00c5"+
+		"\u00c6\u00052\u0000\u0000\u00c5\u00c7\u0003\"\u0011\u0000\u00c6\u00c5"+
 		"\u0001\u0000\u0000\u0000\u00c6\u00c7\u0001\u0000\u0000\u0000\u00c7\u00c8"+
 		"\u0001\u0000\u0000\u0000\u00c8\u00c9\u0003$\u0012\u0000\u00c9!\u0001\u0000"+
-		"\u0000\u0000\u00ca\u00d3\u0005\u001c\u0000\u0000\u00cb\u00d0\u00050\u0000"+
-		"\u0000\u00cc\u00cd\u0005\u0003\u0000\u0000\u00cd\u00cf\u00050\u0000\u0000"+
+		"\u0000\u0000\u00ca\u00d3\u0005\u001c\u0000\u0000\u00cb\u00d0\u00057\u0000"+
+		"\u0000\u00cc\u00cd\u0005\u0003\u0000\u0000\u00cd\u00cf\u00057\u0000\u0000"+
 		"\u00ce\u00cc\u0001\u0000\u0000\u0000\u00cf\u00d2\u0001\u0000\u0000\u0000"+
 		"\u00d0\u00ce\u0001\u0000\u0000\u0000\u00d0\u00d1\u0001\u0000\u0000\u0000"+
 		"\u00d1\u00d4\u0001\u0000\u0000\u0000\u00d2\u00d0\u0001\u0000\u0000\u0000"+
@@ -2508,7 +2516,7 @@ public class DynaParser extends DynaParserBase {
 		"\u0001\u0000\u0000\u0000\u00db\u00dc\u0005\u0001\u0000\u0000\u00dc\u00de"+
 		"\u0003\u0012\t\u0000\u00dd\u00d7\u0001\u0000\u0000\u0000\u00dd\u00db\u0001"+
 		"\u0000\u0000\u0000\u00de%\u0001\u0000\u0000\u0000\u00df\u00e0\u0006\u0013"+
-		"\uffff\uffff\u0000\u00e0\u00e1\u00050\u0000\u0000\u00e1\u00fc\u0001\u0000"+
+		"\uffff\uffff\u0000\u00e0\u00e1\u00057\u0000\u0000\u00e1\u00fc\u0001\u0000"+
 		"\u0000\u0000\u00e2\u00e3\n\u0004\u0000\u0000\u00e3\u00e4\u0005\u001e\u0000"+
 		"\u0000\u00e4\u00e5\u0003\u0012\t\u0000\u00e5\u00e6\u0005\u001f\u0000\u0000"+
 		"\u00e6\u00fb\u0001\u0000\u0000\u0000\u00e7\u00e8\n\u0003\u0000\u0000\u00e8"+
@@ -2519,9 +2527,9 @@ public class DynaParser extends DynaParserBase {
 		"\u0000\u0000\u0000\u00f0\u00ee\u0001\u0000\u0000\u0000\u00f1\u00e9\u0001"+
 		"\u0000\u0000\u0000\u00f1\u00f2\u0001\u0000\u0000\u0000\u00f2\u00f3\u0001"+
 		"\u0000\u0000\u0000\u00f3\u00fb\u0005\u001d\u0000\u0000\u00f4\u00f5\n\u0002"+
-		"\u0000\u0000\u00f5\u00f6\u0005\u0006\u0000\u0000\u00f6\u00fb\u00050\u0000"+
+		"\u0000\u0000\u00f5\u00f6\u0005\u0006\u0000\u0000\u00f6\u00fb\u00057\u0000"+
 		"\u0000\u00f7\u00f8\n\u0001\u0000\u0000\u00f8\u00f9\u0005\u0006\u0000\u0000"+
-		"\u00f9\u00fb\u00052\u0000\u0000\u00fa\u00e2\u0001\u0000\u0000\u0000\u00fa"+
+		"\u00f9\u00fb\u00054\u0000\u0000\u00fa\u00e2\u0001\u0000\u0000\u0000\u00fa"+
 		"\u00e7\u0001\u0000\u0000\u0000\u00fa\u00f4\u0001\u0000\u0000\u0000\u00fa"+
 		"\u00f7\u0001\u0000\u0000\u0000\u00fb\u00fe\u0001\u0000\u0000\u0000\u00fc"+
 		"\u00fa\u0001\u0000\u0000\u0000\u00fc\u00fd\u0001\u0000\u0000\u0000\u00fd"+
@@ -2535,8 +2543,8 @@ public class DynaParser extends DynaParserBase {
 		"\u0000\u010a\u010b\u0001\u0000\u0000\u0000\u010b\u010c\u0005\u001d\u0000"+
 		"\u0000\u010c)\u0001\u0000\u0000\u0000\u010d\u010e\u0005\u0010\u0000\u0000"+
 		"\u010e\u010f\u00034\u001a\u0000\u010f\u0110\u0005\u000e\u0000\u0000\u0110"+
-		"+\u0001\u0000\u0000\u0000\u0111\u0118\u00052\u0000\u0000\u0112\u0118\u0005"+
-		"3\u0000\u0000\u0113\u0118\u00051\u0000\u0000\u0114\u0118\u00054\u0000"+
+		"+\u0001\u0000\u0000\u0000\u0111\u0118\u00054\u0000\u0000\u0112\u0118\u0005"+
+		"5\u0000\u0000\u0113\u0118\u00053\u0000\u0000\u0114\u0118\u00056\u0000"+
 		"\u0000\u0115\u0118\u0003.\u0017\u0000\u0116\u0118\u00030\u0018\u0000\u0117"+
 		"\u0111\u0001\u0000\u0000\u0000\u0117\u0112\u0001\u0000\u0000\u0000\u0117"+
 		"\u0113\u0001\u0000\u0000\u0000\u0117\u0114\u0001\u0000\u0000\u0000\u0117"+
@@ -2556,7 +2564,7 @@ public class DynaParser extends DynaParserBase {
 		"\u012c\u0001\u0000\u0000\u0000\u012f\u0127\u0001\u0000\u0000\u0000\u012f"+
 		"\u0130\u0001\u0000\u0000\u0000\u0130\u0131\u0001\u0000\u0000\u0000\u0131"+
 		"\u0132\u0005\u001b\u0000\u0000\u01321\u0001\u0000\u0000\u0000\u0133\u0134"+
-		"\u00050\u0000\u0000\u0134\u0136\u0005\u0004\u0000\u0000\u0135\u0133\u0001"+
+		"\u00057\u0000\u0000\u0134\u0136\u0005\u0004\u0000\u0000\u0135\u0133\u0001"+
 		"\u0000\u0000\u0000\u0135\u0136\u0001\u0000\u0000\u0000\u0136\u0137\u0001"+
 		"\u0000\u0000\u0000\u0137\u0138\u0003\u0012\t\u0000\u01383\u0001\u0000"+
 		"\u0000\u0000\u0139\u013a\u0003\u0006\u0003\u0000\u013a\u013b\u00036\u001b"+

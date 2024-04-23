@@ -1,6 +1,9 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.Span;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Optimizable;
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 public class Print extends Statement {
 
   public List<Expr> exprs;
+  public static final String SEPARATOR = " ";
 
   public Print(List<Expr> exprs, Span span) {
     super(span);
@@ -34,5 +38,20 @@ public class Print extends Statement {
   @Override
   public Statement optimize() {
     return new Print(exprs.stream().map(Optimizable::optimize).toList(), span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    for (int i = 0; i < exprs.size() - 1; i++) {
+      var expr = exprs.get(i);
+      expr.execute(memory, valueStack, stackFrame);
+      var obj = valueStack.pop();
+      System.out.print(obj.asStr(memory));
+      System.out.print(SEPARATOR);
+    }
+    var expr = exprs.get(exprs.size() - 1);
+    expr.execute(memory, valueStack, stackFrame);
+    var obj = valueStack.pop();
+    System.out.println(obj.asStr(memory));
   }
 }

@@ -1,6 +1,10 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaEmpty;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
@@ -59,5 +63,17 @@ public class Declaration extends Statement {
     }
     if (expression == null) return new Declaration(name, span);
     else return new Declaration(name, expression.optimize(), span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    stackFrame.put(name.name, -1);
+    if (expression != null) expression.execute(memory, valueStack, stackFrame);
+    else valueStack.push(new DynaEmpty());
+
+    var value = valueStack.pop();
+    if (value.isNotAllocated()) memory.alloc(value);
+    int address = memory.alloc(value);
+    stackFrame.put(name.name, address);
   }
 }

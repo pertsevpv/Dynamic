@@ -47,13 +47,16 @@ LE_EQ: '<=';
 GR: '>';
 GR_EQ: '>=';
 EQ: '=';
+REF_EQ: '==';
 NOT_EQ: '/=';
+NOT_RED_EQ : '/==';
 
 // arithmetic operators
 PLUS: '+';
 MINUS: '-';
 MUL: '*';
 DIV: '/';
+MOD: '%';
 
 // types
 INT: 'int';
@@ -63,14 +66,14 @@ STRING: 'string';
 EMPTY: 'empty';
 FUNC: 'func';
 
-// identifier
-IDENTIFIER: Letter LetterOrDigit*;
-
 // literals
 BOOLEAN_LITERAL: 'true' | 'false';
 INTEGER_LITERAL: Digits;
 REAL_LITERAL: (Digits '.' Digits) Exponent?;
 STRING_LITERAL: '"' (~["\\\r\n] | EscapeSeq)* '"';
+
+// identifier
+IDENTIFIER: Letter LetterOrDigit*;
 
 // whitespaces & comments
 WS: [ \t\u000C]+ -> channel(HIDDEN);

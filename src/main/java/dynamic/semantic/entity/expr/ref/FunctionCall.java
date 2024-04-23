@@ -1,6 +1,12 @@
 package dynamic.semantic.entity.expr.ref;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaEmpty;
+import dynamic.interpret.obj.DynaFunc;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Optimizable;
@@ -22,7 +28,7 @@ public class FunctionCall extends Call {
   @Override
   public void validate(ValidationContext context) throws ValidationException {
     ref.validate(context);
-    for (var p: params) p.validate(context);
+    for (var p : params) p.validate(context);
 
     if (ref instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
@@ -53,5 +59,33 @@ public class FunctionCall extends Call {
   public FunctionCall optimize() {
     var optimizedParams = params.stream().map(Optimizable::optimize).toList();
     return new FunctionCall(ref, optimizedParams);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.execute(memory, valueStack, stackFrame);
+    var refObj = valueStack.pop();
+    if (!(refObj instanceof DynaFunc refFunc)) throw new DynaRuntimeException();
+
+    var toReturn = new DynaEmpty();
+    memory.alloc(toReturn);
+
+    for (var p: params) p.execute(memory, valueStack, stackFrame);
+
+    StackFrame frame = new StackFrame(stackFrame, toReturn.memoryAddress);
+
+    refFunc.visibleVars.forEach((k, v) -> {
+      if (v == -1) v = stackFrame.getAddress(k);
+      frame.put(k, v);
+    });
+//    refFunc.visibleVars.forEach(frame::put);
+//    for (var v: refFunc.visibleVars.entrySet()) {
+//      var n = stackFrame.getAddress(v.getKey());
+//      if (n == -1) continue;
+//      frame.put(v.getKey(), n);
+//    }
+
+    refFunc.func.call(memory, valueStack, frame);
+    valueStack.push(memory.get(toReturn.memoryAddress));
   }
 }

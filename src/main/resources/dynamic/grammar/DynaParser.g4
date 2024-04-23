@@ -52,7 +52,7 @@ expression
     ;
 
 relation
-    : factor (sign=('<' | '<=' | '>' | '>=' | '=' | '/=') factor)?
+    : factor (sign=('<' | '<=' | '>' | '>=' | '=' | '/=' | '==' | '/==') factor)?
     ;
 
 factor
@@ -60,7 +60,7 @@ factor
     ;
 
 term
-    : unary (sign+=('*' | '/') unary)*
+    : unary (sign+=('*' | '/' | '%') unary)*
     ;
 
 unary

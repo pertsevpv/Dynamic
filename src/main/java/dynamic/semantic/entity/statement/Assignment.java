@@ -1,8 +1,13 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Context;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
+import dynamic.semantic.entity.expr.lit.Const;
 import dynamic.semantic.entity.expr.ref.FunctionCall;
 import dynamic.semantic.entity.expr.ref.IdRef;
 import dynamic.semantic.entity.expr.ref.Reference;
@@ -50,5 +55,21 @@ public class Assignment extends Statement {
       } else return null;
     }
     return new Assignment(reference, expression.optimize());
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    Context.isLeftRefCall = true;
+    reference.execute(memory, valueStack, stackFrame);
+    Context.isLeftRefCall = false;
+
+    var oldObj = valueStack.pop();
+    var addr = oldObj.memoryAddress;
+
+    expression.execute(memory, valueStack, stackFrame);
+    var newValue = valueStack.pop();
+
+    if (addr == -1) addr = memory.alloc(newValue);
+    memory.write(addr, newValue);
   }
 }
