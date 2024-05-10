@@ -14,7 +14,7 @@ public class DynaString extends DynaObject {
 
   @Override
   public String asStr(Memory memory) {
-    return "%s".formatted(value);
+    return String.format("%s", value);
   }
 
   @Override

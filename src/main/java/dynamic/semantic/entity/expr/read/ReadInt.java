@@ -1,6 +1,6 @@
 package dynamic.semantic.entity.expr.read;
 
-import dynamic.interpret.Context;
+import dynamic.interpret.IOContext;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
@@ -32,6 +32,6 @@ public class ReadInt extends Read<Integer> {
 
   @Override
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
-    valueStack.push(new DynaInteger(Context.nextInt()));
+    valueStack.push(new DynaInteger(IOContext.nextInt()));
   }
 }

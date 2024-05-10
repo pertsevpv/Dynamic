@@ -1,5 +1,5 @@
 import dynamic.exception.ValidationException;
-import dynamic.interpret.Context;
+import dynamic.interpret.IOContext;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
@@ -66,7 +66,7 @@ public class TestParsing {
 
   @Test
   public void testExecute() {
-    int i = Context.nextInt();
+    int i = IOContext.nextInt();
     System.out.println(i);
     String source = readFile("test.d");
     var lexer = new DynaLexer(CharStreams.fromString(source));

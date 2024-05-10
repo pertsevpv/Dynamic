@@ -36,8 +36,8 @@ public class FunctionCall extends Call {
       CheckUtils.checkTypes(Type.FUNC, expr);
       if (expr instanceof Func func) {
         if (func.params.size() != params.size()) {
-          System.out.format("%s Wrong number of params for function call %s: expected %s, got %s\n",
-              span, this, func.params.size(), params.size());
+          System.out.println(String.format("%s Wrong number of params for function call %s: expected %s, got %s\n",
+              span, this, func.params.size(), params.size()));
         }
       }
     }
@@ -78,14 +78,13 @@ public class FunctionCall extends Call {
       if (v == -1) v = stackFrame.getAddress(k);
       frame.put(k, v);
     });
-//    refFunc.visibleVars.forEach(frame::put);
-//    for (var v: refFunc.visibleVars.entrySet()) {
-//      var n = stackFrame.getAddress(v.getKey());
-//      if (n == -1) continue;
-//      frame.put(v.getKey(), n);
-//    }
 
     refFunc.func.call(memory, valueStack, frame);
     valueStack.push(memory.get(toReturn.memoryAddress));
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    throw new DynaRuntimeException();
   }
 }

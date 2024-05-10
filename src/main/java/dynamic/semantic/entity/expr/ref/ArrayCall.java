@@ -2,7 +2,6 @@ package dynamic.semantic.entity.expr.ref;
 
 import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
-import dynamic.interpret.Context;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
@@ -12,11 +11,14 @@ import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.CheckUtils;
 
-import java.math.BigInteger;
+import java.util.SortedMap;
 
 public class ArrayCall extends Call {
 
   public Expr expr;
+
+  private SortedMap<Integer, Integer> array;
+  private int index;
 
   public ArrayCall(Reference ref, Expr expr) {
     super(ref);
@@ -51,21 +53,28 @@ public class ArrayCall extends Call {
     var refObj = valueStack.pop();
 
     if (!(indObj instanceof DynaInteger indInt)) throw new DynaRuntimeException();
-
-    int index = indInt.value.intValueExact();
+    this.index = indInt.value.intValue();
 
     if (refObj instanceof DynaArray gotArray) {
+      this.array = gotArray.array;
+
       DynaObject pushObj;
       Integer pushAddr = gotArray.array.get(index);
-      if (pushAddr == null) {
+      if (pushAddr != null) pushObj = memory.get(pushAddr);
+      else {
         pushObj = new DynaEmpty();
-        if (Context.isLeftRefCall)gotArray.array.put(index, memory.alloc(pushObj));
-      } else pushObj = memory.get(pushAddr);
+        memory.alloc(pushObj);
+      }
       valueStack.push(pushObj);
     } else if (refObj instanceof DynaString gotString) {
       if (index < 0 || index >= gotString.value.length()) throw new DynaRuntimeException();
       char charCode = gotString.value.charAt(index);
       valueStack.push(new DynaString(String.valueOf(charCode)));
     } else throw new DynaRuntimeException();
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    array.put(index, newAddr);
   }
 }

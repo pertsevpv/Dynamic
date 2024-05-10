@@ -1,10 +1,9 @@
 package dynamic.semantic.entity.expr.read;
 
-import dynamic.interpret.Context;
+import dynamic.interpret.IOContext;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
-import dynamic.interpret.obj.DynaInteger;
 import dynamic.interpret.obj.DynaString;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
@@ -33,6 +32,6 @@ public class ReadString extends Read<String> {
 
   @Override
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
-    valueStack.push(new DynaString(Context.nextString()));
+    valueStack.push(new DynaString(IOContext.nextString()));
   }
 }

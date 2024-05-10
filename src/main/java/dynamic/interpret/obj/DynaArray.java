@@ -21,7 +21,7 @@ public class DynaArray extends DynaObject {
     return array.entrySet()
         .stream()
         .map(it -> new Pair<>(it.getKey(), memory.get(it.getValue())))
-        .map(it -> "%d -> %s".formatted(it.first, it.second.asStr(memory)))
+        .map(it -> String.format("%d -> %s", it.first, it.second.asStr(memory)))
         .collect(Collectors.joining(", ", "[", "]"));
   }
 

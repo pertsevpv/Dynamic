@@ -26,10 +26,9 @@ public class DynaFunc extends DynaObject {
 
   @Override
   public String asStr(Memory memory) {
-    return "func(%s)".formatted(
-        func.params.stream()
-            .map(p -> p.name.name)
-            .collect(Collectors.joining(", "))
+    return String.format("func(%s)", func.params.stream()
+        .map(p -> p.name.name)
+        .collect(Collectors.joining(", "))
     );
   }
 

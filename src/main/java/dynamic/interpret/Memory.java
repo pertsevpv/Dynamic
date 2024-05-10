@@ -15,18 +15,11 @@ public class Memory {
   }
 
   public int alloc(DynaObject object) {
+    if (!object.isNotAllocated()) throw new DynaRuntimeError();
     if (memoryPtr >= memory.length) throw new DynaRuntimeError();
     int memoryAddress = memoryPtr++;
     object.memoryAddress = memoryAddress;
     memory[memoryAddress] = object;
-
-//    if (object instanceof DynaTuple tuple) {
-//      for (var t : tuple.tuple) alloc(t.second);
-//    }
-//    if (object instanceof DynaArray array) {
-//      for (var a: array.array.values()) alloc(a);
-//    }
-
     return memoryAddress;
   }
 
@@ -37,6 +30,9 @@ public class Memory {
   }
 
   public DynaObject get(int address) {
+    if (address < 0) {
+      throw new DynaRuntimeError();
+    }
     return memory[address];
   }
 }

@@ -26,7 +26,7 @@ public class Block implements Validatable, Printable, Optimizable<Block>, Execut
     for (var stat: block) {
       stat.validate(context);
       if (hasReturn) {
-        System.out.format("%s statement %s is unreachable\n", stat.span, stat);
+        System.out.println(String.format("%s statement %s is unreachable\n", stat.span, stat));
         stat.isReachable = false;
       }
       if (stat instanceof Return) hasReturn = true;

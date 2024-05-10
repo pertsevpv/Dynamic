@@ -1,6 +1,7 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.IOContext;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
@@ -46,12 +47,12 @@ public class Print extends Statement {
       var expr = exprs.get(i);
       expr.execute(memory, valueStack, stackFrame);
       var obj = valueStack.pop();
-      System.out.print(obj.asStr(memory));
-      System.out.print(SEPARATOR);
+      IOContext.print(obj.asStr(memory));
+      IOContext.print(SEPARATOR);
     }
     var expr = exprs.get(exprs.size() - 1);
     expr.execute(memory, valueStack, stackFrame);
     var obj = valueStack.pop();
-    System.out.println(obj.asStr(memory));
+    IOContext.println(obj.asStr(memory));
   }
 }

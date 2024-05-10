@@ -24,7 +24,7 @@ public class TypeUtils {
     for (var pair: possible) {
       if (checkType(pair.first, paramType)) return pair.second;
     }
-    throw new ValidationException(span, "Illegal param type %s for unary operation %s".formatted(paramType, type));
+    throw new ValidationException(span, String.format("Illegal param type %s for unary operation %s", paramType, type));
   }
 
   public static Type checkBiOpType(
@@ -38,7 +38,7 @@ public class TypeUtils {
     for (var triple: possible) {
       if (checkType(triple.first, leftParam) && checkType(triple.second, rightParam)) return triple.third;
     }
-    throw new ValidationException(span, "Illegal param types %s, %s for binary operation %s".formatted(leftParam, rightParam, type));
+    throw new ValidationException(span, String.format("Illegal param types %s, %s for binary operation %s", leftParam, rightParam, type));
   }
 
   // Param -> Result

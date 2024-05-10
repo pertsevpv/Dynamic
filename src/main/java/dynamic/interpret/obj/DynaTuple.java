@@ -46,6 +46,19 @@ public class DynaTuple extends DynaObject {
         .second;
   }
 
+  public void writeLabel(String label, int newAddr) {
+    tuple.stream()
+        .filter(it -> it.first.equals(label))
+        .findFirst()
+        .orElseThrow()
+        .second = newAddr;
+  }
+
+  public void writePos(int pos, int newAddr) {
+    if (pos < 0 || pos >= tuple.size()) throw new DynaRuntimeException();
+    tuple.get(pos).second = newAddr;
+  }
+
   public static boolean containLabel(List<Pair<String, Integer>> tuple, String label) {
     return tuple.stream().anyMatch(it -> Objects.equals(it.first, label));
   }
@@ -73,6 +86,6 @@ public class DynaTuple extends DynaObject {
 
   private String asStr(Pair<String, DynaObject> pair, Memory memory) {
     if (pair.first == null) return pair.second.asStr(memory);
-    else return "%s := %s".formatted(pair.first, pair.second.asStr(memory));
+    else return String.format("%s := %s", pair.first, pair.second.asStr(memory));
   }
 }

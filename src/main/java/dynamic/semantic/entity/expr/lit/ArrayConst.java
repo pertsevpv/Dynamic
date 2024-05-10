@@ -59,7 +59,7 @@ public class ArrayConst extends Const<List<Expr>> {
     for (var expr: value) {
       expr.execute(memory, valueStack, stackFrame);
       var elem = valueStack.pop();
-      /*if (elem.isNotAllocated()) */memory.alloc(elem);
+      if (elem.isNotAllocated()) memory.alloc(elem);
       array.put(index++, elem.memoryAddress);
     }
     valueStack.push(new DynaArray(array));

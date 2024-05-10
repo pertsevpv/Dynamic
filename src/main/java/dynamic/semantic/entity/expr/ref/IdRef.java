@@ -44,4 +44,9 @@ public class IdRef extends Reference {
     var objAddr = stackFrame.getAddress(id.name);
     valueStack.push(memory.get(objAddr));
   }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    stackFrame.rewrite(id.name, newAddr);
+  }
 }

@@ -10,11 +10,12 @@ var newPerson := func(
         age := currentAge - birthAge
     }
     person := person + {toString := func() => person.fullName + ", " + person.age}
+    person := person + {plusAge := func(age) is person.age := person.age + age; end}
     return person
 end
 
-var ivan := newPerson("Petrov", "Peter", 1999)
-var peter := newPerson("Ivanov", "Ivan", 1984)
+var peter := newPerson("Petrov", "Peter", 1999)
+var ivan := newPerson("Ivanov", "Ivan", 1984)
 
 print ivan
 print ivan.toString()
@@ -22,5 +23,5 @@ print ivan.toString()
 print peter
 print peter.toString()
 
-peter.age := 41
+peter.plusAge(10)
 print peter.toString()

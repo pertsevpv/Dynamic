@@ -19,6 +19,10 @@ public class StackFrame {
     scope.put(varName, memoryAddress);
   }
 
+  public void rewrite(String varName, int memoryAddress) {
+    scope.rewrite(varName, memoryAddress);
+  }
+
   public int getAddress(String str) {
     return scope.getAddress(str);
   }

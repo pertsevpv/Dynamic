@@ -73,7 +73,7 @@ public class Declaration extends Statement {
 
     var value = valueStack.pop();
     if (value.isNotAllocated()) memory.alloc(value);
-    int address = memory.alloc(value);
+    int address = value.memoryAddress;
     stackFrame.put(name.name, address);
   }
 }

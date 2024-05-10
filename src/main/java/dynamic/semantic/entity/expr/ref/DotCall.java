@@ -16,6 +16,8 @@ import dynamic.semantic.entity.expr.Expr;
 public class DotCall extends Call {
   public Id id;
 
+  private DynaTuple tuple;
+
   public DotCall(Reference ref, Id id) {
     super(ref);
     this.ref = ref;
@@ -54,6 +56,12 @@ public class DotCall extends Call {
       return;
     }
     if (!(refObj instanceof DynaTuple refTuple)) throw new DynaRuntimeException();
-    valueStack.push(memory.get(refTuple.getObj(id.name)));
+    this.tuple = refTuple;
+    valueStack.push(memory.get(tuple.getObj(id.name)));
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    tuple.writeLabel(id.name, newAddr);
   }
 }

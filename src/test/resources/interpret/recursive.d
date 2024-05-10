@@ -26,3 +26,4 @@ var fib := func(n) is
 end
 
 print fib(1000)
+// print fibCache

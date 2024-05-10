@@ -29,7 +29,8 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     for (var e: value) {
       e.value.validate(context);
       if (e.id != null) {
-        if (definedLabels.contains(e.id.name)) throw new ValidationException(span, "Tuple %s have duplicated label %s".formatted(this, e.id.name));
+        if (definedLabels.contains(e.id.name))
+          throw new ValidationException(span, String.format("Tuple %s have duplicated label %s", this, e.id.name));
         definedLabels.add(e.id.name);
       }
     }
@@ -81,7 +82,7 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     @Override
     public String toString() {
       if (id == null) return value.toString();
-      else return "%s := %s".formatted(id, value);
+      else return String.format("%s := %s", id, value);
     }
 
     @Override
