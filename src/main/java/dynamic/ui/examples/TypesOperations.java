@@ -55,4 +55,28 @@ public interface TypesOperations {
       print value, "is", getType(value)
       """;
 
+  String OPERATIONS = """
+      var a := 2
+      var b := 2.5
+      
+      print a + b, a - b, a * b, a / b
+      
+      print "Hello, " + "World!"
+      print {a := 1} + {2} + {c := 3}
+      
+      print 2 = 2.0
+      print {a := 1} + {2} + {c := 3} = {a := 1, 2, c := 3}
+      print [1, 2, 3] = [1, 2, 3]
+      
+      print a < b
+      print "apple" < "banana"
+      
+      var r = []
+      a := r
+      b := r
+      
+      print a == b, r == a, r == b
+      print "Hello, " + "World!" == "Hello, World!"
+      """;
+
 }

@@ -19,6 +19,7 @@ public class DynaReal extends DynaObject {
 
   @Override
   public boolean eq(DynaObject other, Memory memory) {
-    return other instanceof DynaReal otherReal && value == otherReal.value;
+    return other instanceof DynaReal dynaReal && value == dynaReal.value
+        || other instanceof DynaInteger dynaInt && dynaInt.value.doubleValue() == value;
   }
 }

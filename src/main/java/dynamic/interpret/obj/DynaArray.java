@@ -4,8 +4,12 @@ import dynamic.interpret.Memory;
 import dynamic.semantic.Type;
 import dynamic.utils.Pair;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DynaArray extends DynaObject {
 
@@ -16,10 +20,14 @@ public class DynaArray extends DynaObject {
     this.array = array;
   }
 
+  public Stream<Map.Entry<Integer, Integer>> sortedStream() {
+    return array.entrySet().stream()
+        .sorted(Map.Entry.comparingByKey());
+  }
+
   @Override
   public String asStr(Memory memory) {
-    return array.entrySet()
-        .stream()
+    return sortedStream()
         .map(it -> new Pair<>(it.getKey(), memory.get(it.getValue())))
 //        .map(it -> String.format("%d -> %s", it.first, it.second.asStr(memory)))
         .map(it -> String.format("%s", it.second.asStr(memory)))

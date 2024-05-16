@@ -32,15 +32,13 @@ public class ForEach extends Statement {
     iterable.execute(memory, valueStack, stackFrame);
     var iterObj = valueStack.pop();
 
-
-    int valueAddr = memory.alloc(new DynaEmpty());
-    stackFrame.put(value.name.name, valueAddr);
     stackFrame.enterScope();
-
     if (iterObj instanceof DynaTuple tupleObj) {
       for (var pair : tupleObj.tuple) {
         if (label != null) {
-          int labelAddr = memory.alloc(new DynaEmpty());
+          int labelAddr;
+          if (pair.first == null) labelAddr = memory.alloc(new DynaEmpty());
+          else labelAddr = memory.alloc(new DynaString(pair.first));
           stackFrame.put(label.name.name, labelAddr);
         }
         var valueObj = memory.get(pair.second);
@@ -48,7 +46,7 @@ public class ForEach extends Statement {
         block.execute(memory, valueStack, stackFrame);
       }
     } else if (iterObj instanceof DynaArray arrayObj) {
-      for (var entry : arrayObj.array.entrySet()) {
+      for (var entry : arrayObj.sortedStream().toList()) {
         if (label != null) {
           var indAddr = memory.alloc(new DynaInteger(entry.getKey()));
           stackFrame.put(label.name.name, indAddr);

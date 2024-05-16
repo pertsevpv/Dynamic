@@ -19,7 +19,7 @@ public interface InputOutput {
       print "Enter string:", readString
       """;
 
-  String READ_ARRAY = """
+  String READING_ARRAY = """
        var arr := []
        var len := readInt
             

@@ -80,15 +80,11 @@ public class For extends Statement {
     if (!(toObj instanceof DynaInteger toInt))
       throw new DynaRuntimeException(to.span, "For borders must be integers");
 
-    int pAddr = memory.alloc(new DynaEmpty());
-    stackFrame.put(param.name.name, pAddr);
     stackFrame.enterScope();
-
     BigInteger i = fromInt.value;
     while (i.compareTo(toInt.value) < 0) {
-      var paramObj = new DynaInteger(i);
-//      memory.write(pAddr, paramObj);
-      stackFrame.rewrite(param.name.name, paramObj.memoryAddress);
+      var paramAddr = memory.alloc(new DynaInteger(i));
+      stackFrame.put(param.name.name, paramAddr);
       block.execute(memory, valueStack, stackFrame);
       i = i.add(BigInteger.valueOf(1));
     }

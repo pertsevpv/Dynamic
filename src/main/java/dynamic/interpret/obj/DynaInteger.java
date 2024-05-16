@@ -26,7 +26,7 @@ public class DynaInteger extends DynaObject {
 
   @Override
   public boolean eq(DynaObject other, Memory memory) {
-    return other instanceof DynaInteger dynaInt && value.equals(dynaInt.value);
-
+    return other instanceof DynaInteger dynaInt && value.equals(dynaInt.value)
+        || other instanceof DynaReal dynaReal && value.doubleValue() == dynaReal.value;
   }
 }

@@ -24,13 +24,13 @@ public class Memory {
   }
 
   public void write(int address, DynaObject object) {
-    if (address < 0 || address >= memoryPtr) throw new DynaRuntimeError("Illegal write address");
+    if (address < 0 || address > memoryPtr) throw new DynaRuntimeError("Illegal write address");
     object.memoryAddress = address;
     memory[address] = object;
   }
 
   public DynaObject get(int address) {
-    if (address < 0 || address >= memoryPtr) throw new DynaRuntimeError("Illegal get address");
+    if (address < 0 || address > memoryPtr) throw new DynaRuntimeError("Illegal get address");
     return memory[address];
   }
 }

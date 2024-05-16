@@ -58,16 +58,13 @@ public class TypeUtils {
       case AND, OR, XOR -> List.of(new Triple<>(Type.BOOL, Type.BOOL, Type.BOOL));
       case LE, LE_EQ, GR, GR_EQ -> List.of(
           new Triple<>(Type.INT, Type.INT, Type.BOOL),
+          new Triple<>(Type.INT, Type.REAL, Type.BOOL),
+          new Triple<>(Type.REAL, Type.INT, Type.BOOL),
           new Triple<>(Type.REAL, Type.REAL, Type.BOOL),
           new Triple<>(Type.STRING, Type.STRING, Type.BOOL)
       );
-      case EQ, NOT_EQ -> List.of(
-          new Triple<>(Type.INT, Type.INT, Type.BOOL),
-          new Triple<>(Type.REAL, Type.REAL, Type.BOOL),
-          new Triple<>(Type.STRING, Type.STRING, Type.BOOL),
-          new Triple<>(Type.BOOL, Type.BOOL, Type.BOOL),
-          new Triple<>(Type.ARRAY, Type.ARRAY, Type.BOOL),
-          new Triple<>(Type.TUPLE, Type.TUPLE, Type.BOOL)
+      case EQ, NOT_EQ, REF_EQ, REF_NOT_EQ -> List.of(
+          new Triple<>(null, null, Type.BOOL)
       );
       case MINUS, DIV, TIMES -> List.of(
           new Triple<>(Type.INT, Type.INT, Type.INT),
@@ -85,10 +82,12 @@ public class TypeUtils {
           new Triple<>(null, Type.STRING, Type.STRING),
           new Triple<>(Type.STRING, null, Type.STRING)
       );
-      case REF_EQ, REF_NOT_EQ -> List.of();
       case MOD -> List.of(
           new Triple<>(Type.INT, Type.INT, Type.INT)
       );
     };
   }
 }
+/*
+
+ */

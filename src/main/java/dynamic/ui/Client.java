@@ -5,6 +5,7 @@ import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
 import dynamic.semantic.context.ValidationContext;
+import dynamic.ui.examples.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.teavm.jso.dom.events.Event;
@@ -26,6 +27,29 @@ public class Client {
 
     runButton = document.getElementById("run").cast();
     runButton.addEventListener("click", Client::onRunClicked);
+
+    onExampleClicked(document, "printing", InputOutput.PRINTING);
+    onExampleClicked(document, "reading", InputOutput.READING);
+    onExampleClicked(document, "readingArray", InputOutput.READING_ARRAY);
+
+    onExampleClicked(document, "getType", TypesOperations.TYPES);
+    onExampleClicked(document, "operations", TypesOperations.OPERATIONS);
+
+    onExampleClicked(document, "lcs", Strings.LCS);
+
+    onExampleClicked(document, "person", Tuple.PERSON);
+
+    onExampleClicked(document, "binSearch", Arrays.BIN_SEARCH);
+    onExampleClicked(document, "mergeSort", Arrays.MERGE_SORT);
+    onExampleClicked(document, "indices", Arrays.INDICES);
+
+    onExampleClicked(document, "while", Loops.WHILE);
+    onExampleClicked(document, "for", Loops.FOR);
+    onExampleClicked(document, "forEach", Loops.FOR_EACH);
+
+    onExampleClicked(document, "recursive", Funcs.RECURSIVE);
+    onExampleClicked(document, "map", Funcs.MAP);
+    onExampleClicked(document, "fold", Funcs.FOLD);
   }
 
   private static void onRunClicked(Event event) {
@@ -50,6 +74,15 @@ public class Client {
     }
   }
 
+  private static void onExampleClicked(HTMLDocument document, String exampleId, String exampleSource) {
+    HTMLButtonElement btn = document.getElementById(exampleId).cast();
+    btn.addEventListener("click", (Event event) -> setSource(exampleSource));
+  }
+
+  private static void setSource(String source) {
+    codeEditor.setValue(source);
+  }
+
   private static void printError(String string) {
     output.getStyle().setProperty("color", "red");
     output.clear();
@@ -57,7 +90,6 @@ public class Client {
   }
 
   private static void print(String string) {
-    System.out.println("Hui: " + string);
     output.setValue(output.getValue() + string);
   }
 }
