@@ -1,12 +1,10 @@
-package dynamic;
+package dynamic.ui;
 
-import dynamic.exception.ValidationException;
 import dynamic.interpret.IOContext;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
 import dynamic.semantic.context.ValidationContext;
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.teavm.jso.dom.events.Event;
@@ -31,8 +29,10 @@ public class Client {
   }
 
   private static void onRunClicked(Event event) {
-    var code = codeEditor.getValue();
-    var inputData = input.getValue();
+    var code = codeEditor.getValue().replace("\r", "");
+    var inputData = input.getValue().replace("\r", "");
+    output.setValue("");
+    output.getStyle().setProperty("color", "black");
     IOContext.setScannerSource(inputData);
     IOContext.setPrint(Client::print);
 
@@ -52,11 +52,12 @@ public class Client {
 
   private static void printError(String string) {
     output.getStyle().setProperty("color", "red");
-    System.out.println("Hui: " + string);
+    output.clear();
     output.setValue(string);
   }
 
   private static void print(String string) {
+    System.out.println("Hui: " + string);
     output.setValue(output.getValue() + string);
   }
 }

@@ -1,6 +1,6 @@
 package dynamic.interpret;
 
-import dynamic.exception.DynaRuntimeException;
+import dynamic.exception.DynaRuntimeError;
 
 import java.util.HashMap;
 
@@ -22,6 +22,6 @@ public class Scope extends HashMap<String, Integer> {
   public void rewrite(String varName, int memoryAddress) {
     if (containsKey(varName)) put(varName, memoryAddress);
     else if (parent != null) parent.rewrite(varName, memoryAddress);
-    else throw new DynaRuntimeException();
+    else throw new DynaRuntimeError(String.format("Var %s is not in frame stack", varName));
   }
 }

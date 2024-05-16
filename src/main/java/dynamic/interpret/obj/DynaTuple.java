@@ -23,7 +23,8 @@ public class DynaTuple extends DynaObject {
   public static List<Pair<String, Integer>> plus(List<Pair<String, Integer>> a, List<Pair<String, Integer>> b) {
     var result = new ArrayList<>(a);
     for (var p2 : b) {
-      if (containLabel(result, p2.first)) throw new DynaRuntimeException();
+      if (containLabel(result, p2.first))
+        throw new DynaRuntimeException("duplicate label: " + p2.first);
       result.add(p2);
     }
     return result;
@@ -34,28 +35,28 @@ public class DynaTuple extends DynaObject {
   }
 
   public int getObj(int i) {
-    if (i < 0 || i >= tuple.size()) throw new DynaRuntimeException();
+    if (i < 0 || i >= tuple.size()) throw new DynaRuntimeException("illegal tuple index: " + i);
     return tuple.get(i).second;
   }
 
   public int getObj(String label) {
     return tuple.stream()
-        .filter(it -> it.first.equals(label))
+        .filter(it -> Objects.equals(it.first, label))
         .findFirst()
-        .orElseThrow(DynaRuntimeException::new)
+        .orElseThrow(() -> new DynaRuntimeException("Illegal tuple label " + label))
         .second;
   }
 
   public void writeLabel(String label, int newAddr) {
     tuple.stream()
-        .filter(it -> it.first.equals(label))
+        .filter(it -> Objects.equals(it.first, label))
         .findFirst()
         .orElseThrow()
         .second = newAddr;
   }
 
   public void writePos(int pos, int newAddr) {
-    if (pos < 0 || pos >= tuple.size()) throw new DynaRuntimeException();
+    if (pos < 0 || pos >= tuple.size()) throw new DynaRuntimeException("Illegal tuple index: " + pos);
     tuple.get(pos).second = newAddr;
   }
 

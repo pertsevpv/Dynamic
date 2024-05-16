@@ -20,7 +20,7 @@ public class UnOps {
     if (obj instanceof DynaBool dynaBool) {
       return new DynaBool(!dynaBool.value);
     }
-    throw new DynaRuntimeException();
+    throw new DynaRuntimeException("Illegal type for not: " + obj.type);
   }
 
   public static DynaObject unMinus(DynaObject obj) {
@@ -30,6 +30,6 @@ public class UnOps {
     if (obj instanceof DynaReal dynaReal) {
       return new DynaReal(-dynaReal.value);
     }
-    throw new DynaRuntimeException();
+    throw new DynaRuntimeException("Illegal type for unary minus: " + obj.type);
   }
 }

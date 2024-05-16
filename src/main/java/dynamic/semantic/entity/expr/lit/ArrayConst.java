@@ -54,7 +54,7 @@ public class ArrayConst extends Const<List<Expr>> {
 
   @Override
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
-    SortedMap<Integer, Integer> array = new TreeMap<>();
+    Map<Integer, Integer> array = new HashMap<>();
     int index = 0;
     for (var expr: value) {
       expr.execute(memory, valueStack, stackFrame);

@@ -11,13 +11,13 @@ import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.CheckUtils;
 
-import java.util.SortedMap;
+import java.util.Map;
 
 public class ArrayCall extends Call {
 
   public Expr expr;
 
-  private SortedMap<Integer, Integer> array;
+  private Map<Integer, Integer> array;
   private int index;
 
   public ArrayCall(Reference ref, Expr expr) {
@@ -52,7 +52,8 @@ public class ArrayCall extends Call {
     var indObj = valueStack.pop();
     var refObj = valueStack.pop();
 
-    if (!(indObj instanceof DynaInteger indInt)) throw new DynaRuntimeException();
+    if (!(indObj instanceof DynaInteger indInt))
+      throw new DynaRuntimeException(expr.span, "Index must be int");
     this.index = indInt.value.intValue();
 
     if (refObj instanceof DynaArray gotArray) {
@@ -67,10 +68,11 @@ public class ArrayCall extends Call {
       }
       valueStack.push(pushObj);
     } else if (refObj instanceof DynaString gotString) {
-      if (index < 0 || index >= gotString.value.length()) throw new DynaRuntimeException();
+      if (index < 0 || index >= gotString.value.length())
+        throw new DynaRuntimeException(span, "Illegal index " + index);
       char charCode = gotString.value.charAt(index);
       valueStack.push(new DynaString(String.valueOf(charCode)));
-    } else throw new DynaRuntimeException();
+    } else throw new DynaRuntimeException(span, "Illegal type to index call: " + refObj.type);
   }
 
   @Override

@@ -72,11 +72,13 @@ public class For extends Statement {
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
     from.execute(memory, valueStack, stackFrame);
     var fromObj = valueStack.pop();
-    if (!(fromObj instanceof DynaInteger fromInt)) throw new DynaRuntimeException();
+    if (!(fromObj instanceof DynaInteger fromInt))
+      throw new DynaRuntimeException(from.span, "For borders must be integers");
 
     to.execute(memory, valueStack, stackFrame);
     var toObj = valueStack.pop();
-    if (!(toObj instanceof DynaInteger toInt)) throw new DynaRuntimeException();
+    if (!(toObj instanceof DynaInteger toInt))
+      throw new DynaRuntimeException(to.span, "For borders must be integers");
 
     int pAddr = memory.alloc(new DynaEmpty());
     stackFrame.put(param.name.name, pAddr);
@@ -84,7 +86,9 @@ public class For extends Statement {
 
     BigInteger i = fromInt.value;
     while (i.compareTo(toInt.value) < 0) {
-      memory.write(pAddr, new DynaInteger(i));
+      var paramObj = new DynaInteger(i);
+//      memory.write(pAddr, paramObj);
+      stackFrame.rewrite(param.name.name, paramObj.memoryAddress);
       block.execute(memory, valueStack, stackFrame);
       i = i.add(BigInteger.valueOf(1));
     }

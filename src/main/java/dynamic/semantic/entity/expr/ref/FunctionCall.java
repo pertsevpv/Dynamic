@@ -65,7 +65,8 @@ public class FunctionCall extends Call {
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
     super.execute(memory, valueStack, stackFrame);
     var refObj = valueStack.pop();
-    if (!(refObj instanceof DynaFunc refFunc)) throw new DynaRuntimeException();
+    if (!(refObj instanceof DynaFunc refFunc))
+      throw new DynaRuntimeException(ref.span, "Trying to call not a function");
 
     var toReturn = new DynaEmpty();
     memory.alloc(toReturn);
@@ -85,6 +86,6 @@ public class FunctionCall extends Call {
 
   @Override
   public void onAssign(int newAddr, StackFrame stackFrame) {
-    throw new DynaRuntimeException();
+    throw new DynaRuntimeException(ref.span, "Can't assign function call");
   }
 }

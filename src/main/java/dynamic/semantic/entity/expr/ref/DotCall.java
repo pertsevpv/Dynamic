@@ -46,16 +46,16 @@ public class DotCall extends Call {
     var refObj = valueStack.pop();
 
     if (refObj instanceof DynaArray refArray) {
-      if (!id.name.equals("length")) throw new DynaRuntimeException();
+      if (!id.name.equals("length")) throw new DynaRuntimeException(span, "Illegal array field access");
       valueStack.push(new DynaInteger(refArray.array.size()));
       return;
     }
     if (refObj instanceof DynaString refString) {
-      if (!id.name.equals("length")) throw new DynaRuntimeException();
+      if (!id.name.equals("length")) throw new DynaRuntimeException(span, "Illegal string field access");
       valueStack.push(new DynaInteger(refString.value.length()));
       return;
     }
-    if (!(refObj instanceof DynaTuple refTuple)) throw new DynaRuntimeException();
+    if (!(refObj instanceof DynaTuple refTuple)) throw new DynaRuntimeException(span, String.format("Illegal %s field access", refObj.type));
     this.tuple = refTuple;
     valueStack.push(memory.get(tuple.getObj(id.name)));
   }

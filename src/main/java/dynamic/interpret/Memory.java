@@ -15,8 +15,8 @@ public class Memory {
   }
 
   public int alloc(DynaObject object) {
-    if (!object.isNotAllocated()) throw new DynaRuntimeError();
-    if (memoryPtr >= memory.length) throw new DynaRuntimeError();
+    if (!object.isNotAllocated()) throw new DynaRuntimeError("Object %s is already allocated ");
+    if (memoryPtr >= memory.length) throw new DynaRuntimeError("Memory overflow");
     int memoryAddress = memoryPtr++;
     object.memoryAddress = memoryAddress;
     memory[memoryAddress] = object;
@@ -24,15 +24,13 @@ public class Memory {
   }
 
   public void write(int address, DynaObject object) {
-    if (address >= memoryPtr) throw new DynaRuntimeError();
+    if (address < 0 || address >= memoryPtr) throw new DynaRuntimeError("Illegal write address");
     object.memoryAddress = address;
     memory[address] = object;
   }
 
   public DynaObject get(int address) {
-    if (address < 0) {
-      throw new DynaRuntimeError();
-    }
+    if (address < 0 || address >= memoryPtr) throw new DynaRuntimeError("Illegal get address");
     return memory[address];
   }
 }

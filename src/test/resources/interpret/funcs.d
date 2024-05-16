@@ -38,7 +38,7 @@ value := compose([
 print value
 
 var inc := func(a) => a + 1
-var mul2 := func(a) => a * 2
+var plus8 := fn(fn(inc, 2), 4)
 value := 16
 
-print fn(fn(inc, 2), 4)(value)
+print plus8(value)

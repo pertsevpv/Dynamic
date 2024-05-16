@@ -15,12 +15,12 @@ public class ValueStack {
   }
 
   public void push(DynaObject obj) {
-    if (stackPtr >= stack.length) throw new DynaRuntimeError();
+    if (stackPtr >= stack.length) throw new DynaRuntimeError("Stack overflow");
     stack[stackPtr++] = obj;
   }
 
   public DynaObject pop() {
-    if (stackPtr - 1 < 0) throw new DynaRuntimeError();
+    if (stackPtr - 1 < 0) throw new DynaRuntimeError("Stack underflow");
     var obj = stack[stackPtr - 1];
     stack[--stackPtr] = null;
     return obj;

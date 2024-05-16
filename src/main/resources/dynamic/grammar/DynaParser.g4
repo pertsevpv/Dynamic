@@ -36,7 +36,8 @@ if
 
 loop
     : WHILE cond=expression loopBody
-    | FOR IDENTIFIER IN (from=expression '..' to=expression) loopBody
+    | FOR param=IDENTIFIER IN (from=expression '..' to=expression) loopBody
+    | FOR (label=IDENTIFIER ',')? value=IDENTIFIER IN iterable=expression loopBody
     ;
 
 return

@@ -14,7 +14,7 @@ import java.nio.file.Path;
 public class Main {
 
   public static void main(String[] args) {
-    String source = readFile("recursive.d");
+    String source = readFile("main.d");
     var lexer = new DynaLexer(CharStreams.fromString(source));
     var tokenStream = new CommonTokenStream(lexer);
     tokenStream.fill();

@@ -68,7 +68,8 @@ public class If extends Statement {
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
     cond.execute(memory, valueStack, stackFrame);
     var condObj = valueStack.pop();
-    if (!(condObj instanceof DynaBool condBool)) throw new DynaRuntimeException();
+    if (!(condObj instanceof DynaBool condBool))
+      throw new DynaRuntimeException(cond.span, "If cond must be boolean");
 
     stackFrame.enterScope();
     if (condBool.value) {

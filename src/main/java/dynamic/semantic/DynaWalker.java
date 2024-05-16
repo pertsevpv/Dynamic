@@ -115,10 +115,18 @@ public class DynaWalker {
       return new While(expr, block, span);
     }
     var span = Span.fromNode(ctx.FOR());
-    var var = new Parameter(Id.fromNode(ctx.IDENTIFIER()));
-    var from = handleExpr(ctx.from);
-    var to = handleExpr(ctx.to);
-    return new For(var, from, to, block, span);
+    if (ctx.iterable != null) {
+      Parameter label = null, value;
+      if (ctx.label != null) label = new Parameter(Id.fromToken(ctx.label));
+      value = new Parameter(Id.fromToken(ctx.value));
+      var iterable = handleExpr(ctx.iterable);
+      return new ForEach(span, label, value, iterable, block);
+    } else {
+      var param = new Parameter(Id.fromToken(ctx.param));
+      var from = handleExpr(ctx.from);
+      var to = handleExpr(ctx.to);
+      return new For(param, from, to, block, span);
+    }
   }
 
   private Expr handleExpr(DynaParser.ExpressionContext ctx) {

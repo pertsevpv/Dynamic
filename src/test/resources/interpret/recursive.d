@@ -1,7 +1,4 @@
 var fac := func(n) is
-    if not(n is int) then
-        return -1
-    end
     if n = 0 then
         return 1
     end
@@ -26,4 +23,3 @@ var fib := func(n) is
 end
 
 print fib(1000)
-// print fibCache

@@ -4,14 +4,14 @@ import dynamic.interpret.Memory;
 import dynamic.semantic.Type;
 import dynamic.utils.Pair;
 
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DynaArray extends DynaObject {
 
-  public SortedMap<Integer, Integer> array;
+  public Map<Integer, Integer> array;
 
-  public DynaArray(SortedMap<Integer, Integer> array) {
+  public DynaArray(Map<Integer, Integer> array) {
     super(Type.ARRAY);
     this.array = array;
   }
@@ -21,7 +21,8 @@ public class DynaArray extends DynaObject {
     return array.entrySet()
         .stream()
         .map(it -> new Pair<>(it.getKey(), memory.get(it.getValue())))
-        .map(it -> String.format("%d -> %s", it.first, it.second.asStr(memory)))
+//        .map(it -> String.format("%d -> %s", it.first, it.second.asStr(memory)))
+        .map(it -> String.format("%s", it.second.asStr(memory)))
         .collect(Collectors.joining(", ", "[", "]"));
   }
 

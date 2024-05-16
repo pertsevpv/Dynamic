@@ -60,7 +60,8 @@ public class While extends Statement {
     while (true) {
       cond.execute(memory, valueStack, stackFrame);
       var condObj = valueStack.pop();
-      if (!(condObj instanceof DynaBool condBool)) throw new DynaRuntimeException();
+      if (!(condObj instanceof DynaBool condBool))
+        throw new DynaRuntimeException(cond.span, "While cond must be boolean");
       if (!condBool.value) break;
       stackFrame.enterScope();
       block.execute(memory, valueStack, stackFrame);

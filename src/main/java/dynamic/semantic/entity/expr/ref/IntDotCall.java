@@ -43,7 +43,8 @@ public class IntDotCall extends Call {
     super.execute(memory, valueStack, stackFrame);
     var refObj = valueStack.pop();
 
-    if (!(refObj instanceof DynaTuple refTuple)) throw new DynaRuntimeException();
+    if (!(refObj instanceof DynaTuple refTuple))
+      throw new DynaRuntimeException(span, "Illegal int dot call");
     valueStack.push(memory.get(refTuple.getObj(label)));
   }
 

@@ -3,6 +3,8 @@ package dynamic.semantic.entity.expr.op;
 import dynamic.exception.DynaRuntimeException;
 import dynamic.interpret.Memory;
 import dynamic.interpret.obj.*;
+import dynamic.semantic.Type;
+
 import java.math.BigInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -21,10 +23,10 @@ public class BiOps {
       case DIV -> divide(left, right);
       case MOD -> mod(left, right);
 
-      case LE -> cmp(left, right, (i) -> i < 0);
-      case LE_EQ -> cmp(left, right, (i) -> i <= 0);
-      case GR -> cmp(left, right, (i) -> i > 0);
-      case GR_EQ -> cmp(left, right, (i) -> i >= 0);
+      case LE -> cmp(left, right, (i) -> i < 0, "<");
+      case LE_EQ -> cmp(left, right, (i) -> i <= 0, "<=");
+      case GR -> cmp(left, right, (i) -> i > 0, ">");
+      case GR_EQ -> cmp(left, right, (i) -> i >= 0, ">=");
 
       case EQ -> new DynaBool(left.eq(right, memory));
       case NOT_EQ -> new DynaBool(!left.eq(right, memory));
@@ -32,9 +34,9 @@ public class BiOps {
       case REF_EQ -> new DynaBool(left.refEq(right));
       case REF_NOT_EQ -> new DynaBool(!left.refEq(right));
 
-      case AND -> logical(left, right, Boolean::logicalAnd);
-      case OR -> logical(left, right, Boolean::logicalOr);
-      case XOR -> logical(left, right, Boolean::logicalXor);
+      case AND -> logical(left, right, Boolean::logicalAnd, "&&");
+      case OR -> logical(left, right, Boolean::logicalOr, "||");
+      case XOR -> logical(left, right, Boolean::logicalXor, "^");
     };
   }
 
@@ -62,7 +64,7 @@ public class BiOps {
       var rightList = rightTuple.tuple;
       return new DynaTuple(DynaTuple.plus(leftList, rightList));
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError("+", left.type, right.type);
   }
 
   private static DynaObject minus(DynaObject left, DynaObject right) {
@@ -75,7 +77,7 @@ public class BiOps {
     } else if (left instanceof DynaReal leftReal && right instanceof DynaReal rightReal) {
       return new DynaReal(leftReal.value - rightReal.value);
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError("-", left.type, right.type);
   }
 
   private static DynaObject times(DynaObject left, DynaObject right) {
@@ -88,12 +90,12 @@ public class BiOps {
     }  else if (left instanceof DynaReal leftReal && right instanceof DynaReal rightReal) {
       return new DynaReal(leftReal.value * rightReal.value);
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError("*", left.type, right.type);
   }
 
   private static DynaObject divide(DynaObject left, DynaObject right) {
     if (left instanceof DynaInteger leftInt && right instanceof DynaInteger rightInt) {
-      if (rightInt.value.equals(BigInteger.ZERO)) throw new DynaRuntimeException();
+      if (rightInt.value.equals(BigInteger.ZERO)) throw new DynaRuntimeException("Division by zero");
       return new DynaInteger(leftInt.value.divide(rightInt.value));
     } else if (left instanceof DynaReal leftReal && right instanceof DynaInteger rightInt) {
       return new DynaReal(leftReal.value / rightInt.value.doubleValue());
@@ -102,17 +104,20 @@ public class BiOps {
     }  else if (left instanceof DynaReal leftReal && right instanceof DynaReal rightReal) {
       return new DynaReal(leftReal.value / rightReal.value);
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError("/", left.type, right.type);
   }
 
   private static DynaObject mod(DynaObject left, DynaObject right) {
     if (left instanceof DynaInteger leftInt && right instanceof DynaInteger rightInt) {
       return new DynaInteger(leftInt.value.mod(rightInt.value));
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError("%", left.type, right.type);
   }
 
-  private static DynaBool cmp(DynaObject left, DynaObject right, Function<Integer, Boolean> cmp) {
+  private static DynaBool cmp(
+      DynaObject left, DynaObject right,
+      Function<Integer, Boolean> cmp, String sign
+  ) {
     if (left instanceof DynaInteger leftInt && right instanceof DynaInteger rightInt) {
       return new DynaBool(cmp.apply(leftInt.value.compareTo(rightInt.value)));
     }
@@ -128,13 +133,20 @@ public class BiOps {
     if (left instanceof DynaString leftString && right instanceof DynaString rightString) {
       return new DynaBool(cmp.apply(leftString.value.compareTo(rightString.value)));
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError(sign, left.type, right.type);
   }
 
-  private static DynaBool logical(DynaObject left, DynaObject right, BiFunction<Boolean, Boolean, Boolean> logical) {
+  private static DynaBool logical(
+      DynaObject left, DynaObject right,
+      BiFunction<Boolean, Boolean, Boolean> logical, String sign
+  ) {
     if (left instanceof DynaBool leftBool && right instanceof DynaBool rightBool) {
-      return new DynaBool(leftBool.value & rightBool.value);
+      return new DynaBool(logical.apply(leftBool.value,  rightBool.value));
     }
-    throw new DynaRuntimeException();
+    throw illegalTypesError(sign, left.type, right.type);
+  }
+
+  private static DynaRuntimeException illegalTypesError(String op, Type type1, Type type2) {
+    return new DynaRuntimeException(String.format("illegal op types: %s %s %s", type1, op, type2));
   }
 }
