@@ -1,6 +1,9 @@
 package dynamic.semantic.entity.expr.op;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
@@ -40,6 +43,14 @@ public class UnOperation extends Expr {
     var optExpr = expr.optimize();
     if (opType == OpType.NOT && optExpr instanceof BoolConst boolConst) return new BoolConst(boolConst.value, span);
     else return new UnOperation(optExpr, opType);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    expr.execute(memory, valueStack, stackFrame);
+
+    var obj = valueStack.pop();
+    valueStack.push(UnOps.op(opType, obj));
   }
 
   public enum OpType {

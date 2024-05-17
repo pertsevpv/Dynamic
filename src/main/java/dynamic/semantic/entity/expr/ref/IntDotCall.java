@@ -1,6 +1,11 @@
 package dynamic.semantic.entity.expr.ref;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaTuple;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.Type;
 import dynamic.semantic.entity.expr.Expr;
@@ -8,6 +13,7 @@ import dynamic.utils.CheckUtils;
 
 public class IntDotCall extends Call {
   public int label;
+  private DynaTuple tuple;
 
   public IntDotCall(Reference ref, int label) {
     super(ref);
@@ -30,5 +36,20 @@ public class IntDotCall extends Call {
   @Override
   public Expr optimize() {
     return new IntDotCall(ref, label);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.execute(memory, valueStack, stackFrame);
+    var refObj = valueStack.pop();
+
+    if (!(refObj instanceof DynaTuple refTuple))
+      throw new DynaRuntimeException(span, "Illegal int dot call");
+    valueStack.push(memory.get(refTuple.getObj(label)));
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    tuple.writePos(label, newAddr);
   }
 }

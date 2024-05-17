@@ -1,14 +1,17 @@
 package dynamic.semantic.entity.expr.lit;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaArray;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.expr.Expr;
-import dynamic.semantic.entity.expr.ref.ArrayCall;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArrayConst extends Const<List<Expr>> {
@@ -43,5 +46,18 @@ public class ArrayConst extends Const<List<Expr>> {
   @Override
   public Expr optimize() {
     return new ArrayConst(value.stream().map(Optimizable::optimize).toList(), span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    Map<Integer, Integer> array = new HashMap<>();
+    int index = 0;
+    for (var expr: value) {
+      expr.execute(memory, valueStack, stackFrame);
+      var elem = valueStack.pop();
+      if (elem.isNotAllocated()) memory.create(elem);
+      array.put(index++, elem.memoryAddress);
+    }
+    valueStack.push(new DynaArray(array));
   }
 }

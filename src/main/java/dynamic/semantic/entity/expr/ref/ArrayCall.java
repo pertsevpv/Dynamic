@@ -1,14 +1,24 @@
 package dynamic.semantic.entity.expr.ref;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.*;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.CheckUtils;
 
+import java.util.Map;
+
 public class ArrayCall extends Call {
 
   public Expr expr;
+
+  private Map<Integer, Integer> array;
+  private int index;
 
   public ArrayCall(Reference ref, Expr expr) {
     super(ref);
@@ -33,5 +43,41 @@ public class ArrayCall extends Call {
   @Override
   public Expr optimize() {
     return new ArrayCall(ref, expr.optimize());
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.execute(memory, valueStack, stackFrame);
+    expr.execute(memory, valueStack, stackFrame);
+    var indObj = valueStack.pop();
+    var refObj = valueStack.pop();
+
+    if (!(indObj instanceof DynaInteger indInt))
+      throw new DynaRuntimeException(expr.span, "Index must be int");
+    this.index = indInt.value.intValue();
+
+    if (refObj instanceof DynaArray gotArray) {
+      this.array = gotArray.array;
+      if (index < 0) throw new DynaRuntimeException(span, "Illegal index " + index);
+
+      DynaObject pushObj;
+      Integer pushAddr = gotArray.array.get(index);
+      if (pushAddr != null) pushObj = memory.get(pushAddr);
+      else {
+        pushObj = new DynaEmpty();
+        memory.create(pushObj);
+      }
+      valueStack.push(pushObj);
+    } else if (refObj instanceof DynaString gotString) {
+      if (index < 0 || index >= gotString.value.length())
+        throw new DynaRuntimeException(span, "Illegal index " + index);
+      char charCode = gotString.value.charAt(index);
+      valueStack.push(new DynaString(String.valueOf(charCode)));
+    } else throw new DynaRuntimeException(span, "Illegal type to index call: " + refObj.type);
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    array.put(index, newAddr);
   }
 }

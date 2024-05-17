@@ -1,5 +1,6 @@
 package dynamic.semantic.entity.expr.ref;
 
+import dynamic.interpret.StackFrame;
 import dynamic.semantic.Span;
 import dynamic.semantic.entity.expr.Expr;
 
@@ -8,5 +9,5 @@ public abstract class Reference extends Expr {
     super(span);
   }
 
-//  public abstract Reference optimize();
+  public abstract void onAssign(int newAddr, StackFrame stackFrame);
 }

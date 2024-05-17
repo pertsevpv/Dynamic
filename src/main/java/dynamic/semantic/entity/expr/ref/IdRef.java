@@ -1,10 +1,12 @@
 package dynamic.semantic.entity.expr.ref;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.entity.expr.Expr;
-import dynamic.semantic.entity.expr.fun.Parameter;
 import dynamic.utils.CheckUtils;
 
 public class IdRef extends Reference {
@@ -22,9 +24,9 @@ public class IdRef extends Reference {
     var expr = context.getExpr(id.name);
     if (expr != null) {
       this.type = expr.type;
-    } else if (!(context.getDecl(id.name) instanceof Parameter)) {
+    }/* else if (!(context.getDecl(id.name) instanceof Parameter)) {
       throw new ValidationException(span, "var %s is empty".formatted(id.name));
-    }
+    }*/
   }
 
   @Override
@@ -35,5 +37,16 @@ public class IdRef extends Reference {
   @Override
   public Expr optimize() {
     return new IdRef(id);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    var objAddr = stackFrame.getAddress(id.name);
+    valueStack.push(memory.get(objAddr));
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    stackFrame.rewrite(id.name, newAddr);
   }
 }

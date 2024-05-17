@@ -1,6 +1,9 @@
 package dynamic.semantic.entity.statement;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.expr.ref.FunctionCall;
@@ -24,7 +27,7 @@ public class Assignment extends Statement {
   @Override
   public void validate(ValidationContext context) throws ValidationException {
     if (reference instanceof FunctionCall call) {
-      throw new ValidationException(call.span, "function call %s is illegal in assigment\n".formatted(call));
+      throw new ValidationException(call.span, String.format("function call %s is illegal in assigment", call));
     } else if (reference instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
     } else {
@@ -50,5 +53,18 @@ public class Assignment extends Statement {
       } else return null;
     }
     return new Assignment(reference, expression.optimize());
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    reference.execute(memory, valueStack, stackFrame);
+    valueStack.pop();
+
+    expression.execute(memory, valueStack, stackFrame);
+    var newValue = valueStack.pop();
+    if (newValue.isNotAllocated()) memory.create(newValue);
+    int newAddr = newValue.memoryAddress;
+
+    reference.onAssign(newAddr, stackFrame);
   }
 }

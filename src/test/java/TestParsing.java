@@ -1,4 +1,5 @@
 import dynamic.exception.ValidationException;
+import dynamic.interpret.IOContext;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
 import dynamic.semantic.DynaWalker;
@@ -18,13 +19,13 @@ public class TestParsing {
 
   @Test
   public void testLexing() {
-    String source = readFile("mergeSort.d");
+    String source = readFile("main2.d");
     Assertions.assertDoesNotThrow(() -> {
       var lexer = new DynaLexer(CharStreams.fromString(source));
       var tokenStream = new CommonTokenStream(lexer);
       tokenStream.fill();
       var allTokens = tokenStream.getTokens();
-      allTokens.forEach(this::printTokenInfo);
+      allTokens.forEach(this::printTokenNames);
     });
   }
 
@@ -43,7 +44,7 @@ public class TestParsing {
 
   @Test
   public void testSemantic() {
-    String source = readFile("mergeSort.d");
+    String source = readFile("binSearch.d");
     var lexer = new DynaLexer(CharStreams.fromString(source));
     var tokenStream = new CommonTokenStream(lexer);
     tokenStream.fill();
@@ -63,9 +64,30 @@ public class TestParsing {
     }
   }
 
+  @Test
+  public void testExecute() {
+    int i = IOContext.nextInt();
+    System.out.println(i);
+    String source = readFile("test.d");
+    var lexer = new DynaLexer(CharStreams.fromString(source));
+    var tokenStream = new CommonTokenStream(lexer);
+    tokenStream.fill();
+    var parser = new DynaParser(tokenStream);
+    parser.setErrorHandler(new BailErrorStrategy());
+    var programCtx = parser.program();
+    try {
+      var walker = new DynaWalker(programCtx).analyze();
+      walker.validate(new ValidationContext());
+      walker.execute();
+    } catch (ValidationException e) {
+      e.printStackTrace();
+//      System.err.println(e.getMessage());
+    }
+  }
+
   private String readFile(String filename) {
     try {
-      return Files.readString(Path.of("src", "test", "resources", "examples", filename));
+      return Files.readString(Path.of("src", "test", "resources", "interpret", filename));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -94,7 +116,7 @@ public class TestParsing {
     if (token.getType() == DynaLexer.NEW_LINE || token.getType() == DynaLexer.WS)
       System.out.print(token.getText());
     else {
-      var ruleName = DynaLexer.VOCABULARY.getDisplayName(token.getType());
+      var ruleName = DynaLexer.VOCABULARY.getSymbolicName(token.getType());
       System.out.print(ruleName);
     }
   }

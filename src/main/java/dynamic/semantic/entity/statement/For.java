@@ -1,6 +1,11 @@
 package dynamic.semantic.entity.statement;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaInteger;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
@@ -8,6 +13,8 @@ import dynamic.semantic.entity.Block;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.semantic.entity.expr.fun.Parameter;
 import dynamic.utils.CheckUtils;
+
+import java.math.BigInteger;
 
 public class For extends Statement {
 
@@ -58,5 +65,28 @@ public class For extends Statement {
   @Override
   public Statement optimize() {
     return new For(param.optimize(), from.optimize(), to.optimize(), block.optimize(), span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    from.execute(memory, valueStack, stackFrame);
+    var fromObj = valueStack.pop();
+    if (!(fromObj instanceof DynaInteger fromInt))
+      throw new DynaRuntimeException(from.span, "For borders must be integers");
+
+    to.execute(memory, valueStack, stackFrame);
+    var toObj = valueStack.pop();
+    if (!(toObj instanceof DynaInteger toInt))
+      throw new DynaRuntimeException(to.span, "For borders must be integers");
+
+    stackFrame.enterScope();
+    BigInteger i = fromInt.value;
+    while (i.compareTo(toInt.value) < 0) {
+      var paramAddr = memory.create(new DynaInteger(i));
+      stackFrame.put(param.name.name, paramAddr);
+      block.execute(memory, valueStack, stackFrame);
+      i = i.add(BigInteger.valueOf(1));
+    }
+    stackFrame.exitScope();
   }
 }

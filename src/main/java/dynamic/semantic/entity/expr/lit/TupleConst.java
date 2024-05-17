@@ -1,6 +1,10 @@
 package dynamic.semantic.entity.expr.lit;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaTuple;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
 import dynamic.semantic.Span;
@@ -10,10 +14,7 @@ import dynamic.semantic.entity.Printable;
 import dynamic.semantic.entity.expr.Expr;
 import dynamic.utils.Pair;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class TupleConst extends Const<List<TupleConst.TupleElem>> {
 
@@ -27,7 +28,8 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     for (var e: value) {
       e.value.validate(context);
       if (e.id != null) {
-        if (definedLabels.contains(e.id.name)) throw new ValidationException(span, "Tuple %s have duplicated label %s".formatted(this, e.id.name));
+        if (definedLabels.contains(e.id.name))
+          throw new ValidationException(span, String.format("Tuple %s have duplicated label %s", this, e.id.name));
         definedLabels.add(e.id.name);
       }
     }
@@ -49,6 +51,20 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     return new TupleConst(value.stream().map(Optimizable::optimize).toList(), span);
   }
 
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    List<Pair<String, Integer>> tuple = new ArrayList<>();
+    for (var tupleElem: value) {
+      var label = tupleElem.id == null ? null : tupleElem.id.name;
+      tupleElem.value.execute(memory, valueStack, stackFrame);
+      var elem = valueStack.pop();
+      if (elem.isNotAllocated()) memory.create(elem);
+      int addr = elem.memoryAddress;
+      tuple.add(new Pair<>(label, addr));
+    }
+    valueStack.push(new DynaTuple(tuple));
+  }
+
   public static class TupleElem implements Printable, Optimizable<TupleElem> {
     public Id id;
     public Expr value;
@@ -65,7 +81,7 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
     @Override
     public String toString() {
       if (id == null) return value.toString();
-      else return "%s := %s".formatted(id, value);
+      else return String.format("%s := %s", id, value);
     }
 
     @Override

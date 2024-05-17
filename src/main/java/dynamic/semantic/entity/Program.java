@@ -1,6 +1,9 @@
 package dynamic.semantic.entity;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
 import dynamic.semantic.context.ValidationContext;
 
 public class Program implements Validatable, Printable, Optimizable<Program> {
@@ -25,4 +28,16 @@ public class Program implements Validatable, Printable, Optimizable<Program> {
   public Program optimize() {
     return new Program(program.optimize());
   }
+
+  public void execute() {
+    Memory memory = new Memory();
+    ValueStack valueStack = new ValueStack();
+    StackFrame globalStackFrame = new StackFrame(null, -1);
+    program.execute(memory, valueStack, globalStackFrame);
+  }
 }
+
+
+
+
+

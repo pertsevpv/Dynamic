@@ -115,10 +115,18 @@ public class DynaWalker {
       return new While(expr, block, span);
     }
     var span = Span.fromNode(ctx.FOR());
-    var var = new Parameter(Id.fromNode(ctx.IDENTIFIER()));
-    var from = handleExpr(ctx.from);
-    var to = handleExpr(ctx.to);
-    return new For(var, from, to, block, span);
+    if (ctx.iterable != null) {
+      Parameter label = null, value;
+      if (ctx.label != null) label = new Parameter(Id.fromToken(ctx.label));
+      value = new Parameter(Id.fromToken(ctx.value));
+      var iterable = handleExpr(ctx.iterable);
+      return new ForEach(span, label, value, iterable, block);
+    } else {
+      var param = new Parameter(Id.fromToken(ctx.param));
+      var from = handleExpr(ctx.from);
+      var to = handleExpr(ctx.to);
+      return new For(param, from, to, block, span);
+    }
   }
 
   private Expr handleExpr(DynaParser.ExpressionContext ctx) {
@@ -222,6 +230,7 @@ public class DynaWalker {
     }
     if (ctx.STRING_LITERAL() != null) {
       String val = ctx.STRING_LITERAL().getText();
+      val = val.substring(1, val.length() - 1);
       return new StringConst(val, span);
     }
     if (ctx.arrayLiteral() != null) {
@@ -306,6 +315,7 @@ public class DynaWalker {
       case "-" -> BiOperation.OpType.MINUS;
       case "*" -> BiOperation.OpType.TIMES;
       case "/" -> BiOperation.OpType.DIV;
+      case "%" -> BiOperation.OpType.MOD;
 
       case "and" -> BiOperation.OpType.AND;
       case "or" -> BiOperation.OpType.OR;
@@ -317,6 +327,9 @@ public class DynaWalker {
       case "/=" -> BiOperation.OpType.NOT_EQ;
       case ">" -> BiOperation.OpType.GR;
       case "=>" -> BiOperation.OpType.GR_EQ;
+
+      case "==" -> BiOperation.OpType.REF_EQ;
+      case "/==" -> BiOperation.OpType.REF_NOT_EQ;
 
       default -> throw new IllegalArgumentException();
     };

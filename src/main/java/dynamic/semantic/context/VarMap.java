@@ -34,7 +34,7 @@ public class VarMap {
 
   private void markUnusedDecl(String name) {
     var decl = varToInfo.get(name);
-    System.out.format("%s var decl of %s is unused\n", decl.initialDeclaration.span, name);
+    System.out.println(String.format("%s var decl of %s is unused", decl.initialDeclaration.span, name));
     decl.initialDeclaration.isVariableUsed = false;
   }
 
@@ -42,7 +42,7 @@ public class VarMap {
     var decl = varToInfo.get(name);
     if (decl.getExpr() != null) {
       if (assignment != null) {
-        System.out.format("%s var %s is rewrote without usage\n", assignment.span, name);
+        System.out.println(String.format("%s var %s is rewrote without usage", assignment.span, name));
         if (decl.initialDeclaration.firstRewroteAssignment == null) decl.initialDeclaration.firstRewroteAssignment = assignment;
         assignment.isReassigned = true;
       }
@@ -54,7 +54,7 @@ public class VarMap {
     Assignment assignment = decl.lastAssignment;
     if (decl.getExpr() != null) {
       if (assignment != null) {
-        System.out.format("%s var %s is rewrote without usage\n", assignment.span, name);
+        System.out.println(String.format("%s var %s is rewrote without usage", assignment.span, name));
         decl.initialDeclaration.firstRewroteAssignment = assignment;
       }
     }

@@ -1,5 +1,10 @@
 package dynamic.semantic.entity.expr.read;
 
+import dynamic.interpret.IOContext;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaString;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
@@ -23,5 +28,10 @@ public class ReadString extends Read<String> {
   @Override
   public Expr optimize() {
     return new ReadString(span);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    valueStack.push(new DynaString(IOContext.nextString()));
   }
 }

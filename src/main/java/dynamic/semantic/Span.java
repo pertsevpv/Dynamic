@@ -50,6 +50,6 @@ public class Span {
 
   @Override
   public String toString() {
-    return "(%d: %d)".formatted(line, pos);
+    return String.format("(%d: %d)", line, pos);
   }
 }

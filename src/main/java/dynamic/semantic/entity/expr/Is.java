@@ -1,6 +1,10 @@
 package dynamic.semantic.entity.expr;
 
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaBool;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.expr.lit.BoolConst;
@@ -41,5 +45,12 @@ public class Is extends Expr {
     var optRef = ref.optimize();
     if (optRef instanceof Const<?> aConst) return new BoolConst(aConst.type == isType, span);
     return new Is(ref, isType);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    ref.execute(memory, valueStack, stackFrame);
+    var obj = valueStack.pop();
+    valueStack.push(new DynaBool(obj.type == isType));
   }
 }

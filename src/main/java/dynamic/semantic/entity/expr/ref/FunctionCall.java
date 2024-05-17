@@ -1,6 +1,12 @@
 package dynamic.semantic.entity.expr.ref;
 
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
+import dynamic.interpret.Memory;
+import dynamic.interpret.StackFrame;
+import dynamic.interpret.ValueStack;
+import dynamic.interpret.obj.DynaEmpty;
+import dynamic.interpret.obj.DynaFunc;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Optimizable;
@@ -30,8 +36,10 @@ public class FunctionCall extends Call {
       CheckUtils.checkTypes(Type.FUNC, expr);
       if (expr instanceof Func func) {
         if (func.params.size() != params.size()) {
-          System.out.format("%s Wrong number of params for function call %s: expected %s, got %s\n",
-              span, this, func.params.size(), params.size());
+          throw new ValidationException(span,
+              String.format("Wrong number of params for function call %s: expected %s, got %s",
+                  this, func.params.size(), params.size())
+          );
         }
       }
     }
@@ -53,5 +61,30 @@ public class FunctionCall extends Call {
   public FunctionCall optimize() {
     var optimizedParams = params.stream().map(Optimizable::optimize).toList();
     return new FunctionCall(ref, optimizedParams);
+  }
+
+  @Override
+  public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
+    super.execute(memory, valueStack, stackFrame);
+    var refObj = valueStack.pop();
+    if (!(refObj instanceof DynaFunc refFunc))
+      throw new DynaRuntimeException(ref.span, "Trying to call not a function");
+
+    var toReturn = new DynaEmpty();
+    memory.create(toReturn);
+
+    for (var p: params) p.execute(memory, valueStack, stackFrame);
+
+    StackFrame frame = new StackFrame(stackFrame, toReturn.memoryAddress);
+
+    refFunc.visibleVars.forEach(frame::put);
+
+    refFunc.func.call(memory, valueStack, frame);
+    valueStack.push(memory.get(toReturn.memoryAddress));
+  }
+
+  @Override
+  public void onAssign(int newAddr, StackFrame stackFrame) {
+    throw new DynaRuntimeException(ref.span, "Can't assign function call");
   }
 }

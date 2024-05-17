@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic language interpreter</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" charset="utf-8" src="teavm/classes.js"></script>
+    <style>
+        * {
+            font-family: "Comic Sans MS", serif;
+            vertical-align: top;
+        }
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body onload="main()">
+<h2>Dynamic language interpreter</h2>
+<div style="display: inline-block; width: 50vw">
+    <textarea id="code-editor" name="Code"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              rows="30"
+              style="resize:none;width: 45vw;
+              white-space: pre;overflow-wrap: normal;overflow-x: scroll;"></textarea>
+</div>
+<div style="display: inline-block; width: 45vw">
+    <button id="run"
+            style="display: block; height: 30px; width: 95px;background-color: green">Run
+    </button>
+    <textarea id="input" rows="13" cols="20" name="Input"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              placeholder="Input"
+              style=";display: block;resize:none;width: 90%;
+              white-space: pre;overflow-wrap: normal;overflow-x: scroll;"></textarea>
+    <textarea id="output" rows="13" cols="20" name="Output"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              placeholder="Output" disabled
+              style="display: block;resize:none;width: 90%;
+              white-space: pre;overflow-wrap: normal;overflow-x: scroll;"></textarea>
+</div>
+<h2>Program examples:</h2>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Input/Output</h3>
+        <li><button id="printing">Printing</button></li>
+        <li><button id="reading">Reading</button></li>
+        <li><button id="readingArray">Reading array</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Types & Operations</h3>
+        <li><button id="getType">Get type</button></li>
+        <li><button id="operations">Operations</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Strings</h3>
+        <li><button id="lcs">LCS</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Tuples</h3>
+        <li><button id="person">Person</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Arrays</h3>
+        <li><button id="binSearch">Binary search</button></li>
+        <li><button id="mergeSort">Merge sort</button></li>
+        <li><button id="indices">Indices</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Loops</h3>
+        <li><button id="while">While</button></li>
+        <li><button id="for">For</button></li>
+        <li><button id="forEach">For each</button></li>
+    </ul>
+</div>
+<div style="display: inline-block;width: max-content; height: 40vh; margin-bottom: 10vh" >
+    <ul>
+        <h3>Functions</h3>
+        <li><button id="recursive">Recursive</button></li>
+        <li><button id="map">Map</button></li>
+        <li><button id="fold">Fold</button></li>
+    </ul>
+</div>
+</body>
+</html>
