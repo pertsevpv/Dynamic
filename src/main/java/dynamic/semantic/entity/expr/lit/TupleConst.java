@@ -4,7 +4,6 @@ import dynamic.exception.ValidationException;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
-import dynamic.interpret.obj.DynaObject;
 import dynamic.interpret.obj.DynaTuple;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Id;
@@ -59,7 +58,7 @@ public class TupleConst extends Const<List<TupleConst.TupleElem>> {
       var label = tupleElem.id == null ? null : tupleElem.id.name;
       tupleElem.value.execute(memory, valueStack, stackFrame);
       var elem = valueStack.pop();
-      if (elem.isNotAllocated()) memory.alloc(elem);
+      if (elem.isNotAllocated()) memory.create(elem);
       int addr = elem.memoryAddress;
       tuple.add(new Pair<>(label, addr));
     }

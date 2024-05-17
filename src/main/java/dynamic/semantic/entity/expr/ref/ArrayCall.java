@@ -58,13 +58,14 @@ public class ArrayCall extends Call {
 
     if (refObj instanceof DynaArray gotArray) {
       this.array = gotArray.array;
+      if (index < 0) throw new DynaRuntimeException(span, "Illegal index " + index);
 
       DynaObject pushObj;
       Integer pushAddr = gotArray.array.get(index);
       if (pushAddr != null) pushObj = memory.get(pushAddr);
       else {
         pushObj = new DynaEmpty();
-        memory.alloc(pushObj);
+        memory.create(pushObj);
       }
       valueStack.push(pushObj);
     } else if (refObj instanceof DynaString gotString) {

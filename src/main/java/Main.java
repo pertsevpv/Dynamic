@@ -1,3 +1,5 @@
+import dynamic.exception.DynaRuntimeError;
+import dynamic.exception.DynaRuntimeException;
 import dynamic.exception.ValidationException;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
@@ -6,6 +8,7 @@ import dynamic.semantic.context.ValidationContext;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,10 +27,14 @@ public class Main {
     try {
       var walker = new DynaWalker(programCtx).analyze();
       walker.validate(new ValidationContext());
+      walker = walker.optimize();
       walker.execute();
     } catch (ValidationException e) {
-      e.printStackTrace();
-      System.err.println(e.getMessage());
+      System.err.println("Validation Error" + e.getMessage());
+    } catch (ParseCancellationException e) {
+      System.err.println("Syntax Error" + e.getMessage());
+    } catch (DynaRuntimeException | DynaRuntimeError e) {
+      System.err.println("Runtime Error" + e.getMessage());
     }
   }
 

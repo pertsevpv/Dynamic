@@ -37,8 +37,8 @@ public class ForEach extends Statement {
       for (var pair : tupleObj.tuple) {
         if (label != null) {
           int labelAddr;
-          if (pair.first == null) labelAddr = memory.alloc(new DynaEmpty());
-          else labelAddr = memory.alloc(new DynaString(pair.first));
+          if (pair.first == null) labelAddr = memory.create(new DynaEmpty());
+          else labelAddr = memory.create(new DynaString(pair.first));
           stackFrame.put(label.name.name, labelAddr);
         }
         var valueObj = memory.get(pair.second);
@@ -48,7 +48,7 @@ public class ForEach extends Statement {
     } else if (iterObj instanceof DynaArray arrayObj) {
       for (var entry : arrayObj.sortedStream().toList()) {
         if (label != null) {
-          var indAddr = memory.alloc(new DynaInteger(entry.getKey()));
+          var indAddr = memory.create(new DynaInteger(entry.getKey()));
           stackFrame.put(label.name.name, indAddr);
         }
         var valueObj = memory.get(entry.getValue());

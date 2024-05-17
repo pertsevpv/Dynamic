@@ -5,7 +5,6 @@ import dynamic.exception.ValidationException;
 import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
-import dynamic.interpret.obj.DynaEmpty;
 import dynamic.interpret.obj.DynaInteger;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
@@ -83,7 +82,7 @@ public class For extends Statement {
     stackFrame.enterScope();
     BigInteger i = fromInt.value;
     while (i.compareTo(toInt.value) < 0) {
-      var paramAddr = memory.alloc(new DynaInteger(i));
+      var paramAddr = memory.create(new DynaInteger(i));
       stackFrame.put(param.name.name, paramAddr);
       block.execute(memory, valueStack, stackFrame);
       i = i.add(BigInteger.valueOf(1));

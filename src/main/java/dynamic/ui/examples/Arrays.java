@@ -69,7 +69,7 @@ public interface Arrays {
       
       print merge([1, 6, 21, 9, 2])
       print merge([-1, 6, -21, 9, 2])
-      print merge(["banana", "apple", "pear", "pineapple", ""])
+      print merge(["banana", "apple", "pear", "pineapple", "cherry"])
       """;
 
   String INDICES = """

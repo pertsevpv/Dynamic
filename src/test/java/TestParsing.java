@@ -19,13 +19,13 @@ public class TestParsing {
 
   @Test
   public void testLexing() {
-    String source = readFile("binSearch.d");
+    String source = readFile("main2.d");
     Assertions.assertDoesNotThrow(() -> {
       var lexer = new DynaLexer(CharStreams.fromString(source));
       var tokenStream = new CommonTokenStream(lexer);
       tokenStream.fill();
       var allTokens = tokenStream.getTokens();
-      allTokens.forEach(this::printTokenInfo);
+      allTokens.forEach(this::printTokenNames);
     });
   }
 
@@ -87,7 +87,7 @@ public class TestParsing {
 
   private String readFile(String filename) {
     try {
-      return Files.readString(Path.of("src", "test", "resources", "examples", filename));
+      return Files.readString(Path.of("src", "test", "resources", "interpret", filename));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -116,7 +116,7 @@ public class TestParsing {
     if (token.getType() == DynaLexer.NEW_LINE || token.getType() == DynaLexer.WS)
       System.out.print(token.getText());
     else {
-      var ruleName = DynaLexer.VOCABULARY.getDisplayName(token.getType());
+      var ruleName = DynaLexer.VOCABULARY.getSymbolicName(token.getType());
       System.out.print(ruleName);
     }
   }

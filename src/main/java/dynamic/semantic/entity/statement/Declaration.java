@@ -67,13 +67,14 @@ public class Declaration extends Statement {
 
   @Override
   public void execute(Memory memory, ValueStack valueStack, StackFrame stackFrame) {
-    stackFrame.put(name.name, -1);
-    if (expression != null) expression.execute(memory, valueStack, stackFrame);
-    else valueStack.push(new DynaEmpty());
+    var newObj = new DynaEmpty();
+    int newAddr = memory.create(newObj);
 
-    var value = valueStack.pop();
-    if (value.isNotAllocated()) memory.alloc(value);
-    int address = value.memoryAddress;
-    stackFrame.put(name.name, address);
+    stackFrame.put(name.name, newAddr);
+    if (expression != null) {
+      expression.execute(memory, valueStack, stackFrame);
+      var value = valueStack.pop();
+      memory.write(newAddr, value);
+    }
   }
 }

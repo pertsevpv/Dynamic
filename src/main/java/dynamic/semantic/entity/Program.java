@@ -34,6 +34,10 @@ public class Program implements Validatable, Printable, Optimizable<Program> {
     ValueStack valueStack = new ValueStack();
     StackFrame globalStackFrame = new StackFrame(null, -1);
     program.execute(memory, valueStack, globalStackFrame);
-    System.out.println();
   }
 }
+
+
+
+
+

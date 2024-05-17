@@ -1,5 +1,8 @@
 package dynamic.ui;
 
+import dynamic.exception.DynaRuntimeError;
+import dynamic.exception.DynaRuntimeException;
+import dynamic.exception.ValidationException;
 import dynamic.interpret.IOContext;
 import dynamic.parser.gen.DynaLexer;
 import dynamic.parser.gen.DynaParser;
@@ -8,6 +11,7 @@ import dynamic.semantic.context.ValidationContext;
 import dynamic.ui.examples.*;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.html.HTMLButtonElement;
 import org.teavm.jso.dom.html.HTMLDocument;
@@ -69,8 +73,12 @@ public class Client {
       var walker = new DynaWalker(programCtx).analyze();
       walker.validate(new ValidationContext());
       walker.execute();
+    } catch (ValidationException e) {
+      printError("Validation Error" + e.getMessage());
+    } catch (DynaRuntimeException | DynaRuntimeError e) {
+      printError("Runtime Error" + e.getMessage());
     } catch (Exception e) {
-      printError(e.getMessage());
+      printError("Error" + e.getMessage());
     }
   }
 

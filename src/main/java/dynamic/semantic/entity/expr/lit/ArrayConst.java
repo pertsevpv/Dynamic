@@ -5,15 +5,11 @@ import dynamic.interpret.Memory;
 import dynamic.interpret.StackFrame;
 import dynamic.interpret.ValueStack;
 import dynamic.interpret.obj.DynaArray;
-import dynamic.interpret.obj.DynaObject;
-import dynamic.interpret.obj.DynaTuple;
 import dynamic.semantic.Span;
 import dynamic.semantic.Type;
 import dynamic.semantic.context.ValidationContext;
 import dynamic.semantic.entity.Optimizable;
 import dynamic.semantic.entity.expr.Expr;
-import dynamic.semantic.entity.expr.ref.ArrayCall;
-import dynamic.utils.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,7 +55,7 @@ public class ArrayConst extends Const<List<Expr>> {
     for (var expr: value) {
       expr.execute(memory, valueStack, stackFrame);
       var elem = valueStack.pop();
-      if (elem.isNotAllocated()) memory.alloc(elem);
+      if (elem.isNotAllocated()) memory.create(elem);
       array.put(index++, elem.memoryAddress);
     }
     valueStack.push(new DynaArray(array));

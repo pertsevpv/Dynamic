@@ -29,7 +29,7 @@ public abstract class Func extends Expr {
     for (int i = params.size() - 1; i >= 0; i--) {
       var param = params.get(i);
       var arg = valueStack.pop();
-      if (arg.isNotAllocated()) memory.alloc(arg);
+      if (arg.isNotAllocated()) memory.create(arg);
       stackFrame.put(param.name.name, arg.memoryAddress);
     }
   }

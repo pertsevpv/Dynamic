@@ -2,6 +2,7 @@ package dynamic.interpret;
 
 import dynamic.exception.DynaRuntimeError;
 import dynamic.interpret.obj.DynaObject;
+import dynamic.semantic.Type;
 
 public class Memory {
 
@@ -14,12 +15,11 @@ public class Memory {
     memory = new DynaObject[MEM_SIZE];
   }
 
-  public int alloc(DynaObject object) {
-    if (!object.isNotAllocated()) throw new DynaRuntimeError("Object %s is already allocated ");
+  public int create(DynaObject object) {
+    if (!object.isNotAllocated()) throw new DynaRuntimeError("Object %s is already created");
     if (memoryPtr >= memory.length) throw new DynaRuntimeError("Memory overflow");
     int memoryAddress = memoryPtr++;
-    object.memoryAddress = memoryAddress;
-    memory[memoryAddress] = object;
+    write(memoryAddress, object);
     return memoryAddress;
   }
 
@@ -34,3 +34,5 @@ public class Memory {
     return memory[address];
   }
 }
+
+

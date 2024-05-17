@@ -28,7 +28,7 @@ public class FunctionCall extends Call {
   @Override
   public void validate(ValidationContext context) throws ValidationException {
     ref.validate(context);
-    for (var p : params) p.validate(context);
+    for (var p: params) p.validate(context);
 
     if (ref instanceof IdRef idRef) {
       CheckUtils.checkVarDeclared(idRef.id, context);
@@ -36,8 +36,10 @@ public class FunctionCall extends Call {
       CheckUtils.checkTypes(Type.FUNC, expr);
       if (expr instanceof Func func) {
         if (func.params.size() != params.size()) {
-          System.out.println(String.format("%s Wrong number of params for function call %s: expected %s, got %s\n",
-              span, this, func.params.size(), params.size()));
+          throw new ValidationException(span,
+              String.format("Wrong number of params for function call %s: expected %s, got %s",
+                  this, func.params.size(), params.size())
+          );
         }
       }
     }
@@ -69,16 +71,13 @@ public class FunctionCall extends Call {
       throw new DynaRuntimeException(ref.span, "Trying to call not a function");
 
     var toReturn = new DynaEmpty();
-    memory.alloc(toReturn);
+    memory.create(toReturn);
 
     for (var p: params) p.execute(memory, valueStack, stackFrame);
 
     StackFrame frame = new StackFrame(stackFrame, toReturn.memoryAddress);
 
-    refFunc.visibleVars.forEach((k, v) -> {
-      if (v == -1) v = stackFrame.getAddress(k);
-      frame.put(k, v);
-    });
+    refFunc.visibleVars.forEach(frame::put);
 
     refFunc.func.call(memory, valueStack, frame);
     valueStack.push(memory.get(toReturn.memoryAddress));

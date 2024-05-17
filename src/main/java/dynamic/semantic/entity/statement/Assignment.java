@@ -62,7 +62,7 @@ public class Assignment extends Statement {
 
     expression.execute(memory, valueStack, stackFrame);
     var newValue = valueStack.pop();
-    if (newValue.isNotAllocated()) memory.alloc(newValue);
+    if (newValue.isNotAllocated()) memory.create(newValue);
     int newAddr = newValue.memoryAddress;
 
     reference.onAssign(newAddr, stackFrame);
